@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claim Your Free Gift // Renewera</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --bg-elevated: #11131a;
+    --bg-card: #14171f;
+    --bg-input: #0a0a0f;
+    --border: #1f2430;
+    --border-strong: #2a3040;
+    --border-accent: #3a4055;
+    --ink: #f0f2f8;
+    --ink-soft: #a0a8bd;
+    --ink-muted: #6b7285;
+    --accent: #b4ff39;
+    --accent-dim: #8ac82a;
+    --accent-glow: rgba(180, 255, 57, 0.15);
+    --danger: #ff4545;
+    --danger-bg: rgba(255, 69, 69, 0.1);
+    --success: #b4ff39;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Space Grotesk', -apple-system, sans-serif;
+    font-weight: 400;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+  body {
+    background-image:
+      radial-gradient(ellipse at top left, rgba(180, 255, 57, 0.04), transparent 40%),
+      radial-gradient(ellipse at bottom right, rgba(180, 255, 57, 0.03), transparent 50%);
+    background-attachment: fixed;
+  }
+  /* Grid pattern background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 48px 48px;
+    opacity: 0.4;
+    pointer-events: none;
+    mask-image: radial-gradient(ellipse at center, black, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black, transparent 80%);
+  }
+
+  .shell {
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Top nav bar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 18px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg-elevated);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    margin-bottom: 40px;
+  }
+  .topbar-brand {
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--ink);
+  }
+  .topbar-brand .slash { color: var(--accent); margin: 0 2px; }
+  .topbar-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--ink-muted);
+  }
+  .status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+  /* Hero */
+  .hero {
+    margin-bottom: 40px;
+  }
+  .hero-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .hero-meta::before {
+    content: '';
+    width: 24px;
+    height: 1px;
+    background: var(--accent);
+  }
+  h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: clamp(38px, 7vw, 56px);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin-bottom: 20px;
+  }
+  h1 .accent {
+    color: var(--accent);
+    position: relative;
+  }
+  h1 .accent::after {
+    content: '_';
+    color: var(--accent);
+    animation: blink 1.2s step-end infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+  .hero-sub {
+    font-size: 16px;
+    color: var(--ink-soft);
+    max-width: 520px;
+  }
+
+  /* Progress indicator */
+  .progress {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 28px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .progress-step {
+    flex: 1;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    background: var(--bg-elevated);
+    color: var(--ink-muted);
+    text-align: center;
+  }
+  .progress-step.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-glow);
+  }
+  .progress-step.done {
+    border-color: var(--border-strong);
+    color: var(--ink-soft);
+  }
+
+  /* Form card */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 28px;
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .card-tag {
+    position: absolute;
+    top: -1px;
+    left: 20px;
+    background: var(--bg);
+    padding: 0 10px;
+    transform: translateY(-50%);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .card-tag::before { content: '> '; color: var(--ink-muted); }
+
+  .field {
+    margin-bottom: 22px;
+  }
+  .field:last-child { margin-bottom: 0; }
+
+  label {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  label .req { color: var(--accent); }
+  label .opt { color: var(--ink-muted); font-size: 10px; }
+
+  input[type="text"], input[type="email"], input[type="tel"] {
+    width: 100%;
+    padding: 14px 16px;
+    background: var(--bg-input);
+    border: 1px solid var(--border-strong);
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--ink);
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+  }
+  input::placeholder { color: var(--ink-muted); }
+
+  .hint {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-muted);
+    margin-top: 6px;
+    letter-spacing: 0.02em;
+  }
+  .hint .symbol { color: var(--accent); }
+
+  /* Submit */
+  .submit-wrap {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .turnstile-wrap {
+    display: flex;
+    justify-content: center;
+  }
+  .submit-btn {
+    width: 100%;
+    padding: 18px;
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 0 24px var(--accent-glow);
+  }
+  .submit-btn:hover:not(:disabled) {
+    background: var(--accent-dim);
+    box-shadow: 0 0 32px rgba(180, 255, 57, 0.3);
+  }
+  .submit-btn:active:not(:disabled) { transform: translateY(1px); }
+  .submit-btn:disabled {
+    background: var(--border-strong);
+    color: var(--ink-muted);
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+  .submit-btn .arrow { transition: transform 0.15s; }
+  .submit-btn:hover:not(:disabled) .arrow { transform: translateX(4px); }
+
+  /* Error */
+  .error-banner {
+    display: none;
+    background: var(--danger-bg);
+    border: 1px solid var(--danger);
+    border-radius: 4px;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--danger);
+  }
+  .error-banner.active { display: block; }
+  .error-banner::before { content: '! '; font-weight: 700; }
+
+  /* Success screen */
+  .success-screen {
+    display: none;
+    text-align: center;
+    padding: 60px 20px;
+  }
+  .success-screen.active { display: block; }
+  .success-icon {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 28px;
+    border: 2px solid var(--accent);
+    background: var(--accent-glow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+    font-size: 36px;
+    font-family: 'JetBrains Mono', monospace;
+    border-radius: 50%;
+    box-shadow: 0 0 40px var(--accent-glow);
+  }
+  .success-screen .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .success-screen h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: clamp(28px, 5vw, 40px);
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+    line-height: 1.1;
+  }
+  .success-screen p {
+    color: var(--ink-soft);
+    max-width: 440px;
+    margin: 0 auto 12px;
+    font-size: 15px;
+  }
+  .success-email {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--accent);
+    padding: 12px 16px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-strong);
+    border-radius: 4px;
+    display: inline-block;
+    margin-top: 8px;
+  }
+
+  /* FAQ */
+  .faq-wrap { margin-top: 64px; }
+  .faq-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .faq-header::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border-strong);
+  }
+  .faq-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-muted);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+  }
+  .faq-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  details.faq-item {
+    border-bottom: 1px solid var(--border);
+    padding: 20px 4px;
+    cursor: pointer;
+  }
+  details.faq-item summary {
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ink);
+    gap: 16px;
+  }
+  details.faq-item summary::-webkit-details-marker { display: none; }
+  details.faq-item summary::after {
+    content: '[+]';
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+  details.faq-item[open] summary::after { content: '[−]'; }
+  details.faq-item p {
+    margin-top: 12px;
+    color: var(--ink-soft);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  /* Footer */
+  .footer {
+    margin-top: 80px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-muted);
+    letter-spacing: 0.05em;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .footer a { color: var(--ink-soft); text-decoration: none; }
+  .footer a:hover { color: var(--accent); }
+
+  .spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(0, 0, 0, 0.3);
+    border-top-color: var(--bg);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <div class="topbar">
+    <div class="topbar-brand">RENEWERA<span class="slash">/</span>FREEGIFT</div>
+    <div class="topbar-status"><span class="status-dot"></span>SECURE CONNECTION</div>
+  </div>
+
+  <div id="mainView">
+
+    <section class="hero">
+      <div class="hero-meta">VERIFIED BUYERS ONLY</div>
+      <h1>Claim your <span class="accent">free gift</span></h1>
+      <p class="hero-sub">To claim your free gift, please fill out the form below so we can verify your purchase and email you your unique claim link.</p>
+    </section>
+
+    <div class="progress">
+      <div class="progress-step active">01 · VERIFY</div>
+      <div class="progress-step">02 · EMAIL LINK</div>
+      <div class="progress-step">03 · CLAIM</div>
+    </div>
+
+    <div class="error-banner" id="errorBanner"></div>
+
+    <form id="giftForm" novalidate>
+
+      <section class="card">
+        <div class="card-tag">IDENTITY</div>
+
+        <div class="field">
+          <label for="fullName">FULL NAME <span class="req">*</span></label>
+          <input type="text" id="fullName" name="fullName" required autocomplete="name" placeholder="Jane Doe">
+        </div>
+
+        <div class="field">
+          <label for="email">EMAIL <span class="req">*</span></label>
+          <input type="email" id="email" name="email" required autocomplete="email" placeholder="you@example.com">
+          <div class="hint"><span class="symbol">→</span> Your claim link will be sent to this address.</div>
+        </div>
+
+        <div class="field">
+          <label for="orderNum">AMAZON ORDER NUMBER <span class="req">*</span></label>
+          <input type="text" id="orderNum" name="orderNum" required autocomplete="off" placeholder="123-4567890-1234567" pattern="^\d{3}-\d{7}-\d{7}$">
+          <div class="hint"><span class="symbol">→</span> Format: 3 digits — 7 digits — 7 digits. Find it in Your Orders on Amazon.</div>
+        </div>
+      </section>
+
+      <div class="submit-wrap">
+        <div class="turnstile-wrap">
+          <div class="cf-turnstile" data-sitekey="YOUR_TURNSTILE_SITE_KEY" data-theme="dark"></div>
+        </div>
+        <button type="submit" class="submit-btn" id="submitBtn">
+          <span class="btn-text">Verify & Send My Link</span>
+          <span class="arrow">→</span>
+        </button>
+      </div>
+
+    </form>
+
+    <section class="faq-wrap">
+      <div class="faq-header"><span class="faq-label">// FAQ</span></div>
+      <h2 class="faq-title">Quick answers.</h2>
+
+      <details class="faq-item"><summary>Is this really free?</summary><p>Yes — genuinely free. No shipping charges, no hidden fees, no subscription. This is our way of saying thank you for choosing Renewera.</p></details>
+      <details class="faq-item"><summary>Why do you need my Amazon order number?</summary><p>We verify every request against a real Renewera purchase to make sure the gift reaches the customers who earned it. One gift per order.</p></details>
+      <details class="faq-item"><summary>What happens after I submit?</summary><p>You'll get an email with a unique link within a few minutes. Click it, enter your shipping address, and we'll ship your gift. The link is single-use and expires in 14 days.</p></details>
+      <details class="faq-item"><summary>Do I need to leave a review?</summary><p>Not required. We'd love it if you'd share an honest review on Amazon, but the gift is yours either way.</p></details>
+      <details class="faq-item"><summary>When will my gift arrive?</summary><p>Once you complete the claim, orders ship within 2–3 business days. US standard shipping takes 5–7 days from there.</p></details>
+      <details class="faq-item"><summary>Will you share my information?</summary><p>Never. Your info is used only to ship your gift and occasionally email you about new Renewera products. Unsubscribe anytime.</p></details>
+    </section>
+  </div>
+
+  <div class="success-screen" id="successView">
+    <div class="success-icon">✓</div>
+    <div class="tag">REQUEST RECEIVED</div>
+    <h2>Check your inbox.</h2>
+    <p>We'll shortly send your unique free gift link to:</p>
+    <div class="success-email" id="successEmail">—</div>
+    <p style="margin-top: 28px;">The link will be valid for 14 days. Check your spam folder if you don't see it within 30 minutes.</p>
+  </div>
+
+  <footer class="footer">
+    <div>© RENEWERA · ALL RIGHTS RESERVED</div>
+    <div>
+      <a href="mailto:contact@renewera.co">SUPPORT</a>
+      &nbsp;·&nbsp;
+      <a href="#">PRIVACY</a>
+      &nbsp;·&nbsp;
+      <a href="#">TERMS</a>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  const WEBHOOK_URL = 'YOUR_N8N_WEBHOOK_URL_FOR_SUBMISSION';
+
+  const form = document.getElementById('giftForm');
+  const errorBanner = document.getElementById('errorBanner');
+  const submitBtn = document.getElementById('submitBtn');
+  const btnText = submitBtn.querySelector('.btn-text');
+  const btnArrow = submitBtn.querySelector('.arrow');
+  const mainView = document.getElementById('mainView');
+  const successView = document.getElementById('successView');
+  const successEmail = document.getElementById('successEmail');
+
+  const showError = (msg) => {
+    errorBanner.textContent = msg;
+    errorBanner.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+  const clearError = () => errorBanner.classList.remove('active');
+
+  // Auto-uppercase order number as user types
+  document.getElementById('orderNum').addEventListener('input', (e) => {
+    // just trim spaces
+    e.target.value = e.target.value.replace(/\s/g, '');
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    clearError();
+
+    const orderNum = document.getElementById('orderNum').value.trim();
+    if (!/^\d{3}-\d{7}-\d{7}$/.test(orderNum)) {
+      showError('Invalid Amazon order number. Expected format: 123-4567890-1234567');
+      return;
+    }
+
+    const turnstileToken = (typeof turnstile !== 'undefined') ? turnstile.getResponse() : 'dev-bypass';
+
+    const payload = {
+      fullName: document.getElementById('fullName').value.trim(),
+      email: document.getElementById('email').value.trim().toLowerCase(),
+      amazonOrderNumber: orderNum,
+      turnstileToken: turnstileToken,
+      submittedAt: new Date().toISOString()
+    };
+
+    submitBtn.disabled = true;
+    btnText.textContent = 'Submitting…';
+    btnArrow.innerHTML = '<span class="spinner"></span>';
+
+    try {
+      const res = await fetch(WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json().catch(() => ({}));
+
+      if (res.ok && data.success) {
+        successEmail.textContent = payload.email;
+        mainView.style.display = 'none';
+        successView.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        const code = data.error || data.code;
+        if (code === 'ORDER_NOT_FOUND') {
+          showError("We couldn't find that order in our system. If you believe this is a mistake, email contact@renewera.co and we'll send your gift manually.");
+        } else if (code === 'ORDER_ALREADY_CLAIMED') {
+          showError('A gift has already been claimed for this Amazon order number.');
+        } else if (code === 'RATE_LIMITED_EMAIL' || code === 'RATE_LIMITED_IP') {
+          showError('Too many requests. Please try again in 24 hours.');
+        } else if (code === 'INVALID_TURNSTILE') {
+          showError('Security check failed. Refresh the page and try again.');
+        } else if (code === 'INVALID_ORDER_FORMAT') {
+          showError('Invalid Amazon order number. Expected format: 123-4567890-1234567');
+        } else if (code === 'DISPOSABLE_EMAIL') {
+          showError('Please use a real email address — disposable email providers are not allowed.');
+        } else {
+          showError(data.error || 'Something went wrong. Please try again.');
+        }
+        submitBtn.disabled = false;
+        btnText.textContent = 'Verify & Send My Link';
+        btnArrow.textContent = '→';
+      }
+    } catch (err) {
+      showError('Network error. Check your connection and try again.');
+      submitBtn.disabled = false;
+      btnText.textContent = 'Verify & Send My Link';
+      btnArrow.textContent = '→';
+    }
+  });
+</script>
+</body>
+</html>

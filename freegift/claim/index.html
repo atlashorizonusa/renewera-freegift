@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Free Gift // Renewera</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --bg-elevated: #11131a;
+    --bg-card: #14171f;
+    --bg-input: #0a0a0f;
+    --border: #1f2430;
+    --border-strong: #2a3040;
+    --ink: #f0f2f8;
+    --ink-soft: #a0a8bd;
+    --ink-muted: #6b7285;
+    --accent: #b4ff39;
+    --accent-dim: #8ac82a;
+    --accent-glow: rgba(180, 255, 57, 0.15);
+    --danger: #ff4545;
+    --danger-bg: rgba(255, 69, 69, 0.1);
+    --warn: #ffb545;
+    --warn-bg: rgba(255, 181, 69, 0.1);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Space Grotesk', sans-serif;
+    line-height: 1.55; -webkit-font-smoothing: antialiased; min-height: 100vh;
+  }
+  body {
+    background-image:
+      radial-gradient(ellipse at top left, rgba(180, 255, 57, 0.04), transparent 40%),
+      radial-gradient(ellipse at bottom right, rgba(180, 255, 57, 0.03), transparent 50%);
+    background-attachment: fixed;
+  }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 48px 48px; opacity: 0.4; pointer-events: none;
+    mask-image: radial-gradient(ellipse at center, black, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black, transparent 80%);
+  }
+  .shell { max-width: 720px; margin: 0 auto; padding: 40px 24px 80px; position: relative; z-index: 1; }
+
+  .topbar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 18px; border: 1px solid var(--border); border-radius: 6px;
+    background: var(--bg-elevated); font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; margin-bottom: 40px;
+  }
+  .topbar-brand { font-weight: 700; letter-spacing: 0.1em; }
+  .topbar-brand .slash { color: var(--accent); margin: 0 2px; }
+  .topbar-status { display: flex; align-items: center; gap: 8px; color: var(--ink-muted); }
+  .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+  /* Loading */
+  .loading { text-align: center; padding: 100px 20px; }
+  .spinner-lg { width: 40px; height: 40px; border: 2px solid var(--border-strong); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 20px; }
+  .loading p { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--ink-muted); letter-spacing: 0.2em; text-transform: uppercase; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Hero */
+  .hero { margin-bottom: 32px; }
+  .hero-meta { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--accent); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
+  .hero-meta::before { content: ''; width: 24px; height: 1px; background: var(--accent); }
+  h1 { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(34px, 6vw, 48px); line-height: 1; letter-spacing: -0.03em; margin-bottom: 16px; }
+  h1 .accent { color: var(--accent); }
+  .hero-sub { font-size: 15px; color: var(--ink-soft); }
+
+  /* Progress */
+  .progress { display: flex; gap: 4px; margin-bottom: 28px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; }
+  .progress-step { flex: 1; padding: 8px 10px; border: 1px solid var(--border); background: var(--bg-elevated); color: var(--ink-muted); text-align: center; }
+  .progress-step.done { border-color: var(--border-strong); color: var(--ink-soft); }
+  .progress-step.active { border-color: var(--accent); color: var(--accent); background: var(--accent-glow); }
+
+  /* Product preview */
+  .product-card {
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
+    padding: 24px; margin-bottom: 16px;
+    display: grid; grid-template-columns: 120px 1fr; gap: 24px; align-items: center;
+    position: relative;
+  }
+  @media (max-width: 520px) { .product-card { grid-template-columns: 1fr; text-align: left; gap: 16px; } }
+  .product-card-tag { position: absolute; top: -1px; left: 20px; background: var(--bg); padding: 0 10px; transform: translateY(-50%); font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); }
+  .product-card-tag::before { content: '> '; color: var(--ink-muted); }
+  .product-img {
+    width: 100%; aspect-ratio: 1;
+    background: linear-gradient(135deg, var(--bg-elevated), var(--border));
+    border: 1px solid var(--border-strong); border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ink-muted); font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    overflow: hidden;
+  }
+  .product-img img { width: 100%; height: 100%; object-fit: cover; }
+  .product-name { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.01em; }
+  .product-desc { font-size: 13px; color: var(--ink-soft); margin-bottom: 14px; }
+  .product-qty {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--ink-muted);
+    letter-spacing: 0.15em; text-transform: uppercase;
+    padding: 5px 10px; border: 1px solid var(--border-strong);
+    border-radius: 2px; display: inline-block;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
+    padding: 28px; margin-bottom: 16px; position: relative;
+  }
+  .card-tag { position: absolute; top: -1px; left: 20px; background: var(--bg); padding: 0 10px; transform: translateY(-50%); font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); }
+  .card-tag::before { content: '> '; color: var(--ink-muted); }
+
+  /* Fields */
+  .field { margin-bottom: 18px; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 520px) { .field-row { grid-template-columns: 1fr; } }
+  label {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--ink-soft); margin-bottom: 8px; letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  label .req { color: var(--accent); }
+  label .opt { color: var(--ink-muted); font-size: 10px; }
+  input[type="text"], input[type="email"], input[type="tel"], select {
+    width: 100%; padding: 14px 16px; background: var(--bg-input);
+    border: 1px solid var(--border-strong); border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace; font-size: 14px;
+    color: var(--ink); transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  input:focus, select:focus {
+    outline: none; border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+  }
+  input::placeholder { color: var(--ink-muted); }
+  select { cursor: pointer; }
+
+  /* Verified identity readout */
+  .identity-row { display: grid; grid-template-columns: auto 1fr; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .identity-row:last-child { border-bottom: none; }
+  .identity-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-muted); letter-spacing: 0.1em; text-transform: uppercase; }
+  .identity-value { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--ink); }
+
+  /* Summary */
+  .summary-row { display: flex; justify-content: space-between; align-items: baseline; padding: 12px 0; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--ink-soft); }
+  .summary-row + .summary-row { border-top: 1px solid var(--border); }
+  .summary-row .item small { display: block; font-size: 10px; color: var(--ink-muted); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 3px; }
+  .summary-row .price { color: var(--ink); }
+  .summary-row.total { border-top: 2px solid var(--accent); margin-top: 8px; padding-top: 16px; }
+  .summary-row.total .label { font-family: 'Space Grotesk', sans-serif; font-size: 16px; color: var(--ink); font-weight: 600; }
+  .summary-row.total .price { font-size: 20px; color: var(--accent); font-weight: 700; font-family: 'Space Grotesk', sans-serif; }
+
+  /* Order button */
+  .order-btn {
+    width: 100%; padding: 18px; margin-top: 24px;
+    background: var(--accent); color: var(--bg); border: none;
+    font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700;
+    letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer; border-radius: 4px;
+    transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    box-shadow: 0 0 24px var(--accent-glow);
+  }
+  .order-btn:hover:not(:disabled) { background: var(--accent-dim); box-shadow: 0 0 32px rgba(180, 255, 57, 0.3); }
+  .order-btn:active:not(:disabled) { transform: translateY(1px); }
+  .order-btn:disabled { background: var(--border-strong); color: var(--ink-muted); cursor: not-allowed; box-shadow: none; }
+  .order-note { text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-muted); margin-top: 12px; letter-spacing: 0.05em; }
+
+  /* State screens */
+  .state-screen { text-align: center; padding: 80px 20px; }
+  .state-icon {
+    width: 72px; height: 72px; margin: 0 auto 28px; border: 2px solid;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px; font-family: 'JetBrains Mono', monospace; border-radius: 50%;
+  }
+  .state-icon.success { border-color: var(--accent); color: var(--accent); background: var(--accent-glow); box-shadow: 0 0 40px var(--accent-glow); }
+  .state-icon.warn { border-color: var(--warn); color: var(--warn); background: var(--warn-bg); }
+  .state-icon.error { border-color: var(--danger); color: var(--danger); background: var(--danger-bg); }
+  .state-screen .tag { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; margin-bottom: 16px; }
+  .state-screen .tag.success { color: var(--accent); }
+  .state-screen .tag.warn { color: var(--warn); }
+  .state-screen .tag.error { color: var(--danger); }
+  .state-screen h2 { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(28px, 5vw, 40px); letter-spacing: -0.02em; margin-bottom: 16px; line-height: 1.1; }
+  .state-screen p { color: var(--ink-soft); max-width: 440px; margin: 0 auto 12px; font-size: 15px; }
+  .state-screen .mono { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--ink-muted); }
+
+  /* FAQ */
+  .faq-wrap { margin-top: 64px; }
+  .faq-header { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
+  .faq-header::after { content: ''; flex: 1; height: 1px; background: var(--border-strong); }
+  .faq-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-muted); letter-spacing: 0.25em; text-transform: uppercase; }
+  .faq-title { font-family: 'Space Grotesk', sans-serif; font-size: 32px; font-weight: 700; letter-spacing: -0.02em; }
+  details.faq-item { border-bottom: 1px solid var(--border); padding: 20px 4px; cursor: pointer; }
+  details.faq-item summary { list-style: none; display: flex; justify-content: space-between; align-items: center; font-size: 15px; font-weight: 500; gap: 16px; }
+  details.faq-item summary::-webkit-details-marker { display: none; }
+  details.faq-item summary::after { content: '[+]'; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent); }
+  details.faq-item[open] summary::after { content: '[−]'; }
+  details.faq-item p { margin-top: 12px; color: var(--ink-soft); font-size: 14px; line-height: 1.7; }
+
+  /* Footer */
+  .footer { margin-top: 80px; padding-top: 24px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-muted); letter-spacing: 0.05em; flex-wrap: wrap; gap: 16px; }
+  .footer a { color: var(--ink-soft); text-decoration: none; }
+  .footer a:hover { color: var(--accent); }
+
+  .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(0,0,0,0.3); border-top-color: var(--bg); border-radius: 50%; animation: spin 0.7s linear infinite; }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <div class="topbar">
+    <div class="topbar-brand">RENEWERA<span class="slash">/</span>CLAIM</div>
+    <div class="topbar-status"><span class="status-dot"></span>SECURE CONNECTION</div>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading" id="loadingView">
+    <div class="spinner-lg"></div>
+    <p>Verifying claim link...</p>
+  </div>
+
+  <!-- Claim form -->
+  <div id="claimView" style="display:none;">
+
+    <section class="hero">
+      <div class="hero-meta">READY TO SHIP</div>
+      <h1>Your <span class="accent">gift</span> is waiting.</h1>
+      <p class="hero-sub">Confirm where you'd like it sent. One click and it's on the way.</p>
+    </section>
+
+    <div class="progress">
+      <div class="progress-step done">01 · VERIFY</div>
+      <div class="progress-step done">02 · EMAIL LINK</div>
+      <div class="progress-step active">03 · CLAIM</div>
+    </div>
+
+    <!-- Product -->
+    <div class="product-card">
+      <div class="product-card-tag">PRODUCT</div>
+      <div class="product-img">
+        <img src="https://via.placeholder.com/400/14171f/b4ff39?text=GIFT" alt="Free gift" onerror="this.style.display='none'; this.parentElement.innerHTML='[ GIFT IMAGE ]';">
+      </div>
+      <div>
+        <div class="product-name" id="productName">Renewera Free Gift</div>
+        <div class="product-desc" id="productDesc">A small thank-you from the Renewera team — included free with your verified order.</div>
+        <span class="product-qty">QTY: 1 · LOCKED</span>
+      </div>
+    </div>
+
+    <!-- Verified identity -->
+    <section class="card">
+      <div class="card-tag">VERIFIED</div>
+      <div class="identity-row">
+        <div class="identity-label">NAME</div>
+        <div class="identity-value" id="idName">—</div>
+      </div>
+      <div class="identity-row">
+        <div class="identity-label">EMAIL</div>
+        <div class="identity-value" id="idEmail">—</div>
+      </div>
+      <div class="identity-row">
+        <div class="identity-label">ORDER</div>
+        <div class="identity-value" id="idOrder">—</div>
+      </div>
+    </section>
+
+    <!-- Shipping address -->
+    <section class="card">
+      <div class="card-tag">SHIPPING DESTINATION</div>
+
+      <div class="field">
+        <label for="phone">PHONE <span class="req">*</span></label>
+        <input type="tel" id="phone" required autocomplete="tel" placeholder="(555) 123-4567">
+      </div>
+      <div class="field">
+        <label for="addr1">STREET ADDRESS <span class="req">*</span></label>
+        <input type="text" id="addr1" required autocomplete="address-line1" placeholder="123 Main Street">
+      </div>
+      <div class="field">
+        <label for="addr2">APT / SUITE <span class="opt">OPTIONAL</span></label>
+        <input type="text" id="addr2" autocomplete="address-line2" placeholder="Unit 4B">
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="city">CITY <span class="req">*</span></label>
+          <input type="text" id="city" required autocomplete="address-level2">
+        </div>
+        <div class="field">
+          <label for="state">STATE <span class="req">*</span></label>
+          <select id="state" required autocomplete="address-level1">
+            <option value="">— SELECT —</option>
+            <option>AL</option><option>AK</option><option>AZ</option><option>AR</option><option>CA</option><option>CO</option><option>CT</option><option>DE</option><option>FL</option><option>GA</option><option>HI</option><option>ID</option><option>IL</option><option>IN</option><option>IA</option><option>KS</option><option>KY</option><option>LA</option><option>ME</option><option>MD</option><option>MA</option><option>MI</option><option>MN</option><option>MS</option><option>MO</option><option>MT</option><option>NE</option><option>NV</option><option>NH</option><option>NJ</option><option>NM</option><option>NY</option><option>NC</option><option>ND</option><option>OH</option><option>OK</option><option>OR</option><option>PA</option><option>RI</option><option>SC</option><option>SD</option><option>TN</option><option>TX</option><option>UT</option><option>VT</option><option>VA</option><option>WA</option><option>WV</option><option>WI</option><option>WY</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="zip">ZIP CODE <span class="req">*</span></label>
+          <input type="text" id="zip" required autocomplete="postal-code" maxlength="10" placeholder="12345">
+        </div>
+        <div class="field">
+          <label for="country">COUNTRY</label>
+          <input type="text" id="country" value="United States" readonly>
+        </div>
+      </div>
+    </section>
+
+    <!-- Order summary -->
+    <section class="card">
+      <div class="card-tag">ORDER SUMMARY</div>
+      <div class="summary-row">
+        <div class="item">Renewera Free Gift<small>QTY: 1 · COMPLIMENTARY</small></div>
+        <div class="price">$0.00</div>
+      </div>
+      <div class="summary-row">
+        <div class="item">Shipping</div>
+        <div class="price">$0.00</div>
+      </div>
+      <div class="summary-row total">
+        <div class="label">TOTAL</div>
+        <div class="price">$0.00</div>
+      </div>
+      <button type="button" class="order-btn" id="orderBtn" disabled>
+        <span class="btn-text">Place Order Now</span>
+        <span class="arrow">→</span>
+      </button>
+      <div class="order-note">// SINGLE-USE LINK · EXPIRES AFTER ORDER</div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-wrap">
+      <div class="faq-header"><span class="faq-label">// FAQ</span></div>
+      <h2 class="faq-title">Quick answers.</h2>
+      <details class="faq-item"><summary>When will my gift arrive?</summary><p>Orders ship within 2–3 business days. US standard shipping takes 5–7 days after that. You'll receive a tracking email once it ships.</p></details>
+      <details class="faq-item"><summary>Can I change my shipping address later?</summary><p>Once you place the order, the link dies and changes aren't possible. Double-check everything before clicking Place Order. For emergencies, email contact@renewera.co immediately.</p></details>
+      <details class="faq-item"><summary>What if this link stops working?</summary><p>Each link is single-use and expires 14 days after being sent. If it's expired or lost, email contact@renewera.co with your Amazon order number.</p></details>
+      <details class="faq-item"><summary>Will you ask me to leave a review?</summary><p>We'd love it — honest reviews help us and other buyers. We'll send a friendly reminder after your gift arrives, but it's completely optional.</p></details>
+    </section>
+  </div>
+
+  <!-- Success -->
+  <div class="state-screen" id="successView" style="display:none;">
+    <div class="state-icon success">✓</div>
+    <div class="tag success">ORDER CONFIRMED</div>
+    <h2>You're all set.</h2>
+    <p>Your free gift is being prepared. We'll send you an order confirmation email shortly, and another email with tracking info as soon as it ships.</p>
+    <p class="mono" style="margin-top: 20px;">// This link has been retired</p>
+  </div>
+
+  <!-- Already claimed / expired -->
+  <div class="state-screen" id="expiredView" style="display:none;">
+    <div class="state-icon warn">!</div>
+    <div class="tag warn" id="expiredTag">LINK EXPIRED</div>
+    <h2 id="expiredTitle">This link is no longer active.</h2>
+    <p id="expiredMsg">Each claim link is single-use and expires 14 days after being issued.</p>
+    <p style="margin-top: 20px;">Contact <a href="mailto:contact@renewera.co" style="color:var(--accent);">contact@renewera.co</a> with your Amazon order number if you need assistance.</p>
+  </div>
+
+  <!-- Invalid token -->
+  <div class="state-screen" id="invalidView" style="display:none;">
+    <div class="state-icon error">✕</div>
+    <div class="tag error">INVALID LINK</div>
+    <h2>Link not found.</h2>
+    <p>We couldn't match this link to any claim. It may have been typed incorrectly or revoked.</p>
+    <p style="margin-top: 20px;">Open the link from your email, or contact <a href="mailto:contact@renewera.co" style="color:var(--accent);">contact@renewera.co</a>.</p>
+  </div>
+
+  <footer class="footer">
+    <div>© RENEWERA · ALL RIGHTS RESERVED</div>
+    <div>
+      <a href="mailto:contact@renewera.co">SUPPORT</a>
+      &nbsp;·&nbsp;
+      <a href="#">PRIVACY</a>
+      &nbsp;·&nbsp;
+      <a href="#">TERMS</a>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  const VERIFY_WEBHOOK = 'YOUR_N8N_WEBHOOK_URL_FOR_VERIFY';
+  const CLAIM_WEBHOOK = 'YOUR_N8N_WEBHOOK_URL_FOR_CLAIM';
+
+  // Extract token
+  const urlParams = new URLSearchParams(window.location.search);
+  let token = urlParams.get('token');
+  if (!token) {
+    const pathParts = window.location.pathname.split('/').filter(Boolean);
+    token = pathParts[pathParts.length - 1];
+  }
+
+  const views = {
+    loading: document.getElementById('loadingView'),
+    claim: document.getElementById('claimView'),
+    success: document.getElementById('successView'),
+    expired: document.getElementById('expiredView'),
+    invalid: document.getElementById('invalidView')
+  };
+  const showView = (name) => {
+    Object.values(views).forEach(v => v.style.display = 'none');
+    views[name].style.display = 'block';
+  };
+
+  const orderBtn = document.getElementById('orderBtn');
+  const btnText = orderBtn.querySelector('.btn-text');
+  const btnArrow = orderBtn.querySelector('.arrow');
+
+  // Enable Order button only when all required shipping fields are filled
+  const requiredFields = ['phone', 'addr1', 'city', 'state', 'zip'];
+  const checkFilled = () => {
+    const allFilled = requiredFields.every(id => {
+      const el = document.getElementById(id);
+      return el && el.value.trim().length > 0;
+    });
+    orderBtn.disabled = !allFilled;
+  };
+  requiredFields.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('input', checkFilled);
+      el.addEventListener('change', checkFilled);
+    }
+  });
+
+  async function verifyToken() {
+    if (!token || token === 'claim') {
+      showView('invalid');
+      return;
+    }
+    try {
+      const res = await fetch(VERIFY_WEBHOOK, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token })
+      });
+      const data = await res.json();
+
+      if (data.state === 'valid') {
+        document.getElementById('idName').textContent = data.fullName || '—';
+        document.getElementById('idEmail').textContent = data.email || '—';
+        document.getElementById('idOrder').textContent = data.amazonOrderNumber || '—';
+        showView('claim');
+      } else if (data.state === 'already_claimed') {
+        document.getElementById('expiredTag').textContent = 'ALREADY CLAIMED';
+        document.getElementById('expiredTitle').textContent = 'This link has already been used.';
+        document.getElementById('expiredMsg').textContent = 'Each claim link can only be used once. Your order is already being processed.';
+        showView('expired');
+      } else {
+        showView('invalid');
+      }
+    } catch (err) {
+      // Demo fallback
+      document.getElementById('idName').textContent = '(demo mode)';
+      document.getElementById('idEmail').textContent = 'no webhook configured';
+      document.getElementById('idOrder').textContent = 'demo';
+      showView('claim');
+    }
+  }
+
+  orderBtn.addEventListener('click', async () => {
+    orderBtn.disabled = true;
+    btnText.textContent = 'Placing order…';
+    btnArrow.innerHTML = '<span class="spinner"></span>';
+
+    const payload = {
+      token: token,
+      phone: document.getElementById('phone').value.trim(),
+      line1: document.getElementById('addr1').value.trim(),
+      line2: document.getElementById('addr2').value.trim(),
+      city: document.getElementById('city').value.trim(),
+      state: document.getElementById('state').value,
+      zip: document.getElementById('zip').value.trim(),
+      country: 'US'
+    };
+
+    try {
+      const res = await fetch(CLAIM_WEBHOOK, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (data.success) {
+        showView('success');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        orderBtn.disabled = false;
+        btnText.textContent = 'Place Order Now';
+        btnArrow.textContent = '→';
+        alert(data.error || 'Could not place order. Please try again or contact support.');
+      }
+    } catch (err) {
+      // Demo fallback
+      showView('success');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  });
+
+  verifyToken();
+</script>
+</body>
+</html>
