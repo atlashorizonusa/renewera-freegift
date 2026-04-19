@@ -3,308 +3,617 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Your Free Gift // Renewera</title>
+<title>Your Free Gift — Renewera</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0a0a0f;
-    --bg-elevated: #11131a;
-    --bg-card: #14171f;
-    --bg-input: #0a0a0f;
-    --border: #1f2430;
-    --border-strong: #2a3040;
-    --ink: #f0f2f8;
-    --ink-soft: #a0a8bd;
-    --ink-muted: #6b7285;
-    --accent: #b4ff39;
-    --accent-dim: #8ac82a;
-    --accent-glow: rgba(180, 255, 57, 0.15);
-    --danger: #ff4545;
-    --danger-bg: rgba(255, 69, 69, 0.1);
-    --warn: #ffb545;
-    --warn-bg: rgba(255, 181, 69, 0.1);
+    --bg: #fdf8f2;
+    --bg-soft: #f5ebdd;
+    --bg-card: #ffffff;
+    --ink: #2d2420;
+    --ink-soft: #6b5d52;
+    --ink-muted: #a0948a;
+    --accent: #c86b3c;
+    --accent-hover: #a85528;
+    --accent-soft: #f5e0d1;
+    --accent-glow: rgba(200, 107, 60, 0.12);
+    --sage: #7a9471;
+    --sage-soft: #e1ebdb;
+    --border: #e8dfd2;
+    --border-soft: #f0e6d6;
+    --danger: #b8564a;
+    --danger-bg: #f9e8e4;
+    --warn: #c99a3c;
+    --warn-bg: #faf1de;
+    --shadow-sm: 0 1px 2px rgba(45, 36, 32, 0.04);
+    --shadow-md: 0 4px 16px rgba(45, 36, 32, 0.06);
+    --shadow-lg: 0 12px 40px rgba(45, 36, 32, 0.08);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body {
-    background: var(--bg); color: var(--ink);
-    font-family: 'Space Grotesk', sans-serif;
-    line-height: 1.55; -webkit-font-smoothing: antialiased; min-height: 100vh;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
   }
   body {
     background-image:
-      radial-gradient(ellipse at top left, rgba(180, 255, 57, 0.04), transparent 40%),
-      radial-gradient(ellipse at bottom right, rgba(180, 255, 57, 0.03), transparent 50%);
+      radial-gradient(ellipse at top, rgba(200, 107, 60, 0.05), transparent 50%),
+      radial-gradient(ellipse at bottom right, rgba(122, 148, 113, 0.04), transparent 45%);
     background-attachment: fixed;
   }
-  body::before {
-    content: ''; position: fixed; inset: 0;
-    background-image:
-      linear-gradient(var(--border) 1px, transparent 1px),
-      linear-gradient(90deg, var(--border) 1px, transparent 1px);
-    background-size: 48px 48px; opacity: 0.4; pointer-events: none;
-    mask-image: radial-gradient(ellipse at center, black, transparent 80%);
-    -webkit-mask-image: radial-gradient(ellipse at center, black, transparent 80%);
+  .shell {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
   }
-  .shell { max-width: 720px; margin: 0 auto; padding: 40px 24px 80px; position: relative; z-index: 1; }
 
-  .topbar {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 14px 18px; border: 1px solid var(--border); border-radius: 6px;
-    background: var(--bg-elevated); font-family: 'JetBrains Mono', monospace;
-    font-size: 11px; margin-bottom: 40px;
+  .brand {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 0 36px;
   }
-  .topbar-brand { font-weight: 700; letter-spacing: 0.1em; }
-  .topbar-brand .slash { color: var(--accent); margin: 0 2px; }
-  .topbar-status { display: flex; align-items: center; gap: 8px; color: var(--ink-muted); }
-  .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); animation: pulse 2s ease-in-out infinite; }
-  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+  .brand-mark {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 20px;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+  }
+  .brand-mark .dot { color: var(--accent); }
 
   /* Loading */
-  .loading { text-align: center; padding: 100px 20px; }
-  .spinner-lg { width: 40px; height: 40px; border: 2px solid var(--border-strong); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 20px; }
-  .loading p { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--ink-muted); letter-spacing: 0.2em; text-transform: uppercase; }
+  .loading {
+    text-align: center;
+    padding: 120px 20px;
+    color: var(--ink-soft);
+  }
+  .spinner-lg {
+    width: 36px;
+    height: 36px;
+    border: 3px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+    margin: 0 auto 20px;
+  }
   @keyframes spin { to { transform: rotate(360deg); } }
 
   /* Hero */
-  .hero { margin-bottom: 32px; }
-  .hero-meta { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--accent); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
-  .hero-meta::before { content: ''; width: 24px; height: 1px; background: var(--accent); }
-  h1 { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(34px, 6vw, 48px); line-height: 1; letter-spacing: -0.03em; margin-bottom: 16px; }
-  h1 .accent { color: var(--accent); }
-  .hero-sub { font-size: 15px; color: var(--ink-soft); }
+  .hero {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .hero-pill {
+    display: inline-block;
+    padding: 6px 14px;
+    background: var(--sage-soft);
+    color: var(--sage);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    margin-bottom: 20px;
+  }
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: clamp(36px, 6.5vw, 52px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 18px;
+    color: var(--ink);
+  }
+  h1 em {
+    font-style: italic;
+    color: var(--accent);
+    font-weight: 400;
+  }
+  .hero-sub {
+    font-size: 17px;
+    color: var(--ink-soft);
+    max-width: 520px;
+    margin: 0 auto;
+    line-height: 1.55;
+  }
 
   /* Progress */
-  .progress { display: flex; gap: 4px; margin-bottom: 28px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; }
-  .progress-step { flex: 1; padding: 8px 10px; border: 1px solid var(--border); background: var(--bg-elevated); color: var(--ink-muted); text-align: center; }
-  .progress-step.done { border-color: var(--border-strong); color: var(--ink-soft); }
-  .progress-step.active { border-color: var(--accent); color: var(--accent); background: var(--accent-glow); }
-
-  /* Product preview */
-  .product-card {
-    background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
-    padding: 24px; margin-bottom: 16px;
-    display: grid; grid-template-columns: 120px 1fr; gap: 24px; align-items: center;
-    position: relative;
+  .progress {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 32px;
   }
-  @media (max-width: 520px) { .product-card { grid-template-columns: 1fr; text-align: left; gap: 16px; } }
-  .product-card-tag { position: absolute; top: -1px; left: 20px; background: var(--bg); padding: 0 10px; transform: translateY(-50%); font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); }
-  .product-card-tag::before { content: '> '; color: var(--ink-muted); }
-  .product-img {
-    width: 100%; aspect-ratio: 1;
-    background: linear-gradient(135deg, var(--bg-elevated), var(--border));
-    border: 1px solid var(--border-strong); border-radius: 4px;
-    display: flex; align-items: center; justify-content: center;
-    color: var(--ink-muted); font-family: 'JetBrains Mono', monospace; font-size: 11px;
-    overflow: hidden;
+  .step-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--border);
+    transition: all 0.2s ease;
   }
-  .product-img img { width: 100%; height: 100%; object-fit: cover; }
-  .product-name { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.01em; }
-  .product-desc { font-size: 13px; color: var(--ink-soft); margin-bottom: 14px; }
-  .product-qty {
-    font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--ink-muted);
-    letter-spacing: 0.15em; text-transform: uppercase;
-    padding: 5px 10px; border: 1px solid var(--border-strong);
-    border-radius: 2px; display: inline-block;
+  .step-dot.done { background: var(--sage); }
+  .step-dot.active {
+    background: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-glow);
+  }
+  .step-label {
+    font-size: 12px;
+    color: var(--ink-muted);
+    margin-left: 6px;
+    font-weight: 500;
   }
 
-  /* Cards */
+  /* Card */
   .card {
-    background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
-    padding: 28px; margin-bottom: 16px; position: relative;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 28px;
+    box-shadow: var(--shadow-md);
+    margin-bottom: 14px;
   }
-  .card-tag { position: absolute; top: -1px; left: 20px; background: var(--bg); padding: 0 10px; transform: translateY(-50%); font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); }
-  .card-tag::before { content: '> '; color: var(--ink-muted); }
+  .card-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-title::before {
+    content: '';
+    width: 16px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  /* Identity (read-only) */
+  .identity-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .identity-row:last-child { border-bottom: none; }
+  .identity-label {
+    font-size: 13px;
+    color: var(--ink-muted);
+    font-weight: 500;
+  }
+  .identity-value {
+    font-weight: 600;
+    color: var(--ink);
+    font-size: 15px;
+    text-align: right;
+    word-break: break-word;
+  }
+
+  /* Product card */
+  .product-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 24px;
+    margin-bottom: 14px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    box-shadow: var(--shadow-md);
+  }
+  .product-img {
+    width: 96px;
+    height: 96px;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, var(--accent-soft), var(--bg-soft));
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    color: var(--accent);
+  }
+  .product-info { flex: 1; }
+  .product-name {
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+  }
+  .product-desc {
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    margin-bottom: 8px;
+  }
+  .product-meta {
+    display: inline-block;
+    padding: 3px 10px;
+    background: var(--bg-soft);
+    color: var(--ink-soft);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border-radius: 999px;
+  }
 
   /* Fields */
-  .field { margin-bottom: 18px; }
-  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-  @media (max-width: 520px) { .field-row { grid-template-columns: 1fr; } }
+  .field { margin-bottom: 20px; }
+  .field:last-child { margin-bottom: 0; }
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .field-row .field { margin-bottom: 0; }
+
   label {
-    display: flex; justify-content: space-between; align-items: baseline;
-    font-family: 'JetBrains Mono', monospace; font-size: 11px;
-    color: var(--ink-soft); margin-bottom: 8px; letter-spacing: 0.08em; text-transform: uppercase;
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 8px;
   }
   label .req { color: var(--accent); }
-  label .opt { color: var(--ink-muted); font-size: 10px; }
-  input[type="text"], input[type="email"], input[type="tel"], select {
-    width: 100%; padding: 14px 16px; background: var(--bg-input);
-    border: 1px solid var(--border-strong); border-radius: 4px;
-    font-family: 'JetBrains Mono', monospace; font-size: 14px;
-    color: var(--ink); transition: border-color 0.15s, box-shadow 0.15s;
+  label .opt { color: var(--ink-muted); font-weight: 400; font-size: 12px; }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  select {
+    width: 100%;
+    padding: 13px 15px;
+    background: var(--bg-card);
+    border: 1.5px solid var(--border);
+    border-radius: 11px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    color: var(--ink);
+    transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
   }
-  input:focus, select:focus {
-    outline: none; border-color: var(--accent);
-    box-shadow: 0 0 0 3px var(--accent-glow);
+  select { cursor: pointer; }
+  input[readonly] {
+    background: var(--bg-soft);
+    color: var(--ink-soft);
+    cursor: default;
+  }
+  input:focus:not([readonly]),
+  select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-glow);
+    background: #fffcf8;
   }
   input::placeholder { color: var(--ink-muted); }
-  select { cursor: pointer; }
-
-  /* Verified identity readout */
-  .identity-row { display: grid; grid-template-columns: auto 1fr; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--border); }
-  .identity-row:last-child { border-bottom: none; }
-  .identity-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-muted); letter-spacing: 0.1em; text-transform: uppercase; }
-  .identity-value { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--ink); }
 
   /* Summary */
-  .summary-row { display: flex; justify-content: space-between; align-items: baseline; padding: 12px 0; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--ink-soft); }
-  .summary-row + .summary-row { border-top: 1px solid var(--border); }
-  .summary-row .item small { display: block; font-size: 10px; color: var(--ink-muted); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 3px; }
-  .summary-row .price { color: var(--ink); }
-  .summary-row.total { border-top: 2px solid var(--accent); margin-top: 8px; padding-top: 16px; }
-  .summary-row.total .label { font-family: 'Space Grotesk', sans-serif; font-size: 16px; color: var(--ink); font-weight: 600; }
-  .summary-row.total .price { font-size: 20px; color: var(--accent); font-weight: 700; font-family: 'Space Grotesk', sans-serif; }
-
-  /* Order button */
-  .order-btn {
-    width: 100%; padding: 18px; margin-top: 24px;
-    background: var(--accent); color: var(--bg); border: none;
-    font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700;
-    letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer; border-radius: 4px;
-    transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
-    display: flex; align-items: center; justify-content: center; gap: 10px;
-    box-shadow: 0 0 24px var(--accent-glow);
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-soft);
+    font-size: 15px;
   }
-  .order-btn:hover:not(:disabled) { background: var(--accent-dim); box-shadow: 0 0 32px rgba(180, 255, 57, 0.3); }
+  .summary-row:last-of-type { border-bottom: none; }
+  .summary-row.total {
+    border-top: 2px solid var(--ink);
+    border-bottom: none;
+    padding-top: 14px;
+    margin-top: 4px;
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 18px;
+  }
+  .summary-row .item { display: flex; flex-direction: column; }
+  .summary-row .item small {
+    font-size: 12px;
+    color: var(--ink-muted);
+    font-weight: 400;
+    margin-top: 2px;
+  }
+  .summary-row .price {
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .summary-row .price.free {
+    color: var(--sage);
+  }
+
+  .order-btn {
+    width: 100%;
+    padding: 16px 20px;
+    margin-top: 20px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 12px;
+    transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 4px 14px rgba(200, 107, 60, 0.25);
+  }
+  .order-btn:hover:not(:disabled) {
+    background: var(--accent-hover);
+    box-shadow: 0 6px 20px rgba(200, 107, 60, 0.35);
+  }
   .order-btn:active:not(:disabled) { transform: translateY(1px); }
-  .order-btn:disabled { background: var(--border-strong); color: var(--ink-muted); cursor: not-allowed; box-shadow: none; }
-  .order-note { text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-muted); margin-top: 12px; letter-spacing: 0.05em; }
+  .order-btn:disabled {
+    background: var(--border);
+    color: var(--ink-muted);
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+  .order-btn .arrow { font-size: 18px; transition: transform 0.15s; }
+  .order-btn:hover:not(:disabled) .arrow { transform: translateX(3px); }
+  .order-note {
+    text-align: center;
+    margin-top: 14px;
+    font-size: 12px;
+    color: var(--ink-muted);
+  }
+
+  .spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
 
   /* State screens */
-  .state-screen { text-align: center; padding: 80px 20px; }
-  .state-icon {
-    width: 72px; height: 72px; margin: 0 auto 28px; border: 2px solid;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 36px; font-family: 'JetBrains Mono', monospace; border-radius: 50%;
+  .state-screen {
+    text-align: center;
+    padding: 60px 20px;
   }
-  .state-icon.success { border-color: var(--accent); color: var(--accent); background: var(--accent-glow); box-shadow: 0 0 40px var(--accent-glow); }
-  .state-icon.warn { border-color: var(--warn); color: var(--warn); background: var(--warn-bg); }
-  .state-icon.error { border-color: var(--danger); color: var(--danger); background: var(--danger-bg); }
-  .state-screen .tag { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; margin-bottom: 16px; }
-  .state-screen .tag.success { color: var(--accent); }
-  .state-screen .tag.warn { color: var(--warn); }
-  .state-screen .tag.error { color: var(--danger); }
-  .state-screen h2 { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(28px, 5vw, 40px); letter-spacing: -0.02em; margin-bottom: 16px; line-height: 1.1; }
-  .state-screen p { color: var(--ink-soft); max-width: 440px; margin: 0 auto 12px; font-size: 15px; }
-  .state-screen .mono { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--ink-muted); }
+  .state-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 38px;
+    border-radius: 50%;
+  }
+  .state-icon.success {
+    background: var(--sage-soft);
+    color: var(--sage);
+    box-shadow: 0 0 0 8px rgba(122, 148, 113, 0.08);
+  }
+  .state-icon.warn {
+    background: var(--warn-bg);
+    color: var(--warn);
+    box-shadow: 0 0 0 8px rgba(201, 154, 60, 0.08);
+  }
+  .state-icon.error {
+    background: var(--danger-bg);
+    color: var(--danger);
+    box-shadow: 0 0 0 8px rgba(184, 86, 74, 0.08);
+  }
+  .state-screen .state-pill {
+    display: inline-block;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    margin-bottom: 16px;
+  }
+  .state-pill.success { background: var(--sage-soft); color: var(--sage); }
+  .state-pill.warn { background: var(--warn-bg); color: var(--warn); }
+  .state-pill.error { background: var(--danger-bg); color: var(--danger); }
+  .state-screen h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: clamp(28px, 5vw, 38px);
+    letter-spacing: -0.02em;
+    margin-bottom: 14px;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+  .state-screen h2 em { font-style: italic; color: var(--accent); }
+  .state-screen p {
+    color: var(--ink-soft);
+    max-width: 460px;
+    margin: 0 auto 10px;
+    font-size: 16px;
+  }
+  .state-screen a { color: var(--accent); text-decoration: none; font-weight: 500; }
+  .state-screen a:hover { text-decoration: underline; }
 
   /* FAQ */
   .faq-wrap { margin-top: 64px; }
-  .faq-header { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
-  .faq-header::after { content: ''; flex: 1; height: 1px; background: var(--border-strong); }
-  .faq-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-muted); letter-spacing: 0.25em; text-transform: uppercase; }
-  .faq-title { font-family: 'Space Grotesk', sans-serif; font-size: 32px; font-weight: 700; letter-spacing: -0.02em; }
-  details.faq-item { border-bottom: 1px solid var(--border); padding: 20px 4px; cursor: pointer; }
-  details.faq-item summary { list-style: none; display: flex; justify-content: space-between; align-items: center; font-size: 15px; font-weight: 500; gap: 16px; }
+  .faq-title {
+    font-family: 'Fraunces', serif;
+    font-size: 26px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+    text-align: center;
+    color: var(--ink);
+  }
+  details.faq-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 10px;
+    cursor: pointer;
+  }
+  details.faq-item[open] {
+    border-color: var(--accent-soft);
+    box-shadow: var(--shadow-sm);
+  }
+  details.faq-item summary {
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+    gap: 16px;
+  }
   details.faq-item summary::-webkit-details-marker { display: none; }
-  details.faq-item summary::after { content: '[+]'; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent); }
-  details.faq-item[open] summary::after { content: '[−]'; }
-  details.faq-item p { margin-top: 12px; color: var(--ink-soft); font-size: 14px; line-height: 1.7; }
+  details.faq-item summary::after {
+    content: '+';
+    font-size: 22px;
+    color: var(--accent);
+    flex-shrink: 0;
+    font-weight: 400;
+    transition: transform 0.2s;
+    line-height: 1;
+  }
+  details.faq-item[open] summary::after { transform: rotate(45deg); }
+  details.faq-item p {
+    margin-top: 10px;
+    color: var(--ink-soft);
+    font-size: 14.5px;
+    line-height: 1.65;
+  }
 
   /* Footer */
-  .footer { margin-top: 80px; padding-top: 24px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-muted); letter-spacing: 0.05em; flex-wrap: wrap; gap: 16px; }
-  .footer a { color: var(--ink-soft); text-decoration: none; }
+  .footer {
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--ink-muted);
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+  .footer a { color: var(--ink-soft); text-decoration: none; transition: color 0.15s; }
   .footer a:hover { color: var(--accent); }
 
-  .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(0,0,0,0.3); border-top-color: var(--bg); border-radius: 50%; animation: spin 0.7s linear infinite; }
+  @media (max-width: 520px) {
+    .shell { padding: 24px 16px 60px; }
+    .card, .product-card { padding: 22px 20px; }
+    .field-row { grid-template-columns: 1fr; gap: 0; }
+    .field-row .field { margin-bottom: 20px; }
+    .product-card { flex-direction: column; text-align: center; }
+    .product-img { width: 80px; height: 80px; }
+  }
 </style>
 </head>
 <body>
 <div class="shell">
 
-  <div class="topbar">
-    <div class="topbar-brand">RENEWERA<span class="slash">/</span>CLAIM</div>
-    <div class="topbar-status"><span class="status-dot"></span>SECURE CONNECTION</div>
+  <div class="brand">
+    <div class="brand-mark">Renewera<span class="dot">·</span></div>
   </div>
 
   <!-- Loading -->
   <div class="loading" id="loadingView">
     <div class="spinner-lg"></div>
-    <p>Verifying claim link...</p>
+    <p>Verifying your claim link…</p>
   </div>
 
   <!-- Claim form -->
   <div id="claimView" style="display:none;">
 
     <section class="hero">
-      <div class="hero-meta">READY TO SHIP</div>
-      <h1>Your <span class="accent">gift</span> is waiting.</h1>
+      <div class="hero-pill">Verified · Ready to ship</div>
+      <h1>Your <em>gift</em> is waiting.</h1>
       <p class="hero-sub">Confirm where you'd like it sent. One click and it's on the way.</p>
     </section>
 
-    <div class="progress">
-      <div class="progress-step done">01 · VERIFY</div>
-      <div class="progress-step done">02 · EMAIL LINK</div>
-      <div class="progress-step active">03 · CLAIM</div>
+    <div class="progress" aria-label="Progress">
+      <span class="step-dot done"></span>
+      <span class="step-dot done"></span>
+      <span class="step-dot active"></span>
+      <span class="step-label">Step 3 of 3 — Final details</span>
     </div>
 
     <!-- Product -->
     <div class="product-card">
-      <div class="product-card-tag">PRODUCT</div>
-      <div class="product-img">
-        <img src="https://via.placeholder.com/400/14171f/b4ff39?text=GIFT" alt="Free gift" onerror="this.style.display='none'; this.parentElement.innerHTML='[ GIFT IMAGE ]';">
-      </div>
-      <div>
-        <div class="product-name" id="productName">Renewera Free Gift</div>
-        <div class="product-desc" id="productDesc">A small thank-you from the Renewera team — included free with your verified order.</div>
-        <span class="product-qty">QTY: 1 · LOCKED</span>
+      <div class="product-img">🎁</div>
+      <div class="product-info">
+        <div class="product-name" id="productName">Renewera Ankle Wrap</div>
+        <div class="product-desc" id="productDesc">A warm, supportive companion to your foot massager — a small thank-you from our team.</div>
+        <span class="product-meta">Qty 1 · Complimentary</span>
       </div>
     </div>
 
     <!-- Verified identity -->
     <section class="card">
-      <div class="card-tag">VERIFIED</div>
+      <div class="card-title">Your details</div>
       <div class="identity-row">
-        <div class="identity-label">NAME</div>
+        <div class="identity-label">Name</div>
         <div class="identity-value" id="idName">—</div>
       </div>
       <div class="identity-row">
-        <div class="identity-label">EMAIL</div>
+        <div class="identity-label">Email</div>
         <div class="identity-value" id="idEmail">—</div>
       </div>
       <div class="identity-row">
-        <div class="identity-label">ORDER</div>
+        <div class="identity-label">Order</div>
         <div class="identity-value" id="idOrder">—</div>
       </div>
     </section>
 
     <!-- Shipping address -->
     <section class="card">
-      <div class="card-tag">SHIPPING DESTINATION</div>
+      <div class="card-title">Shipping address</div>
 
       <div class="field">
-        <label for="phone">PHONE <span class="req">*</span></label>
+        <label for="phone">Phone <span class="req">*</span></label>
         <input type="tel" id="phone" required autocomplete="tel" placeholder="(555) 123-4567">
       </div>
       <div class="field">
-        <label for="addr1">STREET ADDRESS <span class="req">*</span></label>
+        <label for="addr1">Street address <span class="req">*</span></label>
         <input type="text" id="addr1" required autocomplete="address-line1" placeholder="123 Main Street">
       </div>
       <div class="field">
-        <label for="addr2">APT / SUITE <span class="opt">OPTIONAL</span></label>
+        <label for="addr2">Apt / Suite <span class="opt">optional</span></label>
         <input type="text" id="addr2" autocomplete="address-line2" placeholder="Unit 4B">
       </div>
       <div class="field-row">
         <div class="field">
-          <label for="city">CITY <span class="req">*</span></label>
+          <label for="city">City <span class="req">*</span></label>
           <input type="text" id="city" required autocomplete="address-level2">
         </div>
         <div class="field">
-          <label for="state">STATE <span class="req">*</span></label>
+          <label for="state">State <span class="req">*</span></label>
           <select id="state" required autocomplete="address-level1">
-            <option value="">— SELECT —</option>
+            <option value="">Select…</option>
             <option>AL</option><option>AK</option><option>AZ</option><option>AR</option><option>CA</option><option>CO</option><option>CT</option><option>DE</option><option>FL</option><option>GA</option><option>HI</option><option>ID</option><option>IL</option><option>IN</option><option>IA</option><option>KS</option><option>KY</option><option>LA</option><option>ME</option><option>MD</option><option>MA</option><option>MI</option><option>MN</option><option>MS</option><option>MO</option><option>MT</option><option>NE</option><option>NV</option><option>NH</option><option>NJ</option><option>NM</option><option>NY</option><option>NC</option><option>ND</option><option>OH</option><option>OK</option><option>OR</option><option>PA</option><option>RI</option><option>SC</option><option>SD</option><option>TN</option><option>TX</option><option>UT</option><option>VT</option><option>VA</option><option>WA</option><option>WV</option><option>WI</option><option>WY</option>
           </select>
         </div>
       </div>
       <div class="field-row">
         <div class="field">
-          <label for="zip">ZIP CODE <span class="req">*</span></label>
+          <label for="zip">ZIP code <span class="req">*</span></label>
           <input type="text" id="zip" required autocomplete="postal-code" maxlength="10" placeholder="12345">
         </div>
         <div class="field">
-          <label for="country">COUNTRY</label>
+          <label for="country">Country</label>
           <input type="text" id="country" value="United States" readonly>
         </div>
       </div>
@@ -312,30 +621,29 @@
 
     <!-- Order summary -->
     <section class="card">
-      <div class="card-tag">ORDER SUMMARY</div>
+      <div class="card-title">Order summary</div>
       <div class="summary-row">
-        <div class="item">Renewera Free Gift<small>QTY: 1 · COMPLIMENTARY</small></div>
-        <div class="price">$0.00</div>
+        <div class="item">Renewera Ankle Wrap<small>Qty 1 · Complimentary</small></div>
+        <div class="price free">Free</div>
       </div>
       <div class="summary-row">
         <div class="item">Shipping</div>
-        <div class="price">$0.00</div>
+        <div class="price free">Free</div>
       </div>
       <div class="summary-row total">
-        <div class="label">TOTAL</div>
+        <div>Total</div>
         <div class="price">$0.00</div>
       </div>
       <button type="button" class="order-btn" id="orderBtn" disabled>
-        <span class="btn-text">Place Order Now</span>
+        <span class="btn-text">Place order</span>
         <span class="arrow">→</span>
       </button>
-      <div class="order-note">// SINGLE-USE LINK · EXPIRES AFTER ORDER</div>
+      <div class="order-note">Single-use link · Expires after your order is placed</div>
     </section>
 
     <!-- FAQ -->
     <section class="faq-wrap">
-      <div class="faq-header"><span class="faq-label">// FAQ</span></div>
-      <h2 class="faq-title">Quick answers.</h2>
+      <h2 class="faq-title">Questions?</h2>
       <details class="faq-item"><summary>When will my gift arrive?</summary><p>Orders ship within 2–3 business days. US standard shipping takes 5–7 days after that. You'll receive a tracking email once it ships.</p></details>
       <details class="faq-item"><summary>Can I change my shipping address later?</summary><p>Once you place the order, the link dies and changes aren't possible. Double-check everything before clicking Place Order. For emergencies, email contact@renewera.co immediately.</p></details>
       <details class="faq-item"><summary>What if this link stops working?</summary><p>Each link is single-use and expires 14 days after being sent. If it's expired or lost, email contact@renewera.co with your Amazon order number.</p></details>
@@ -346,38 +654,38 @@
   <!-- Success -->
   <div class="state-screen" id="successView" style="display:none;">
     <div class="state-icon success">✓</div>
-    <div class="tag success">ORDER CONFIRMED</div>
-    <h2>You're all set.</h2>
-    <p>Your free gift is being prepared. We'll send you an order confirmation email shortly, and another email with tracking info as soon as it ships.</p>
-    <p class="mono" style="margin-top: 20px;">// This link has been retired</p>
+    <div class="state-pill success">Order confirmed</div>
+    <h2>You're all <em>set</em>.</h2>
+    <p>Your free gift is being prepared. We'll send you an order confirmation shortly, and another email with tracking info as soon as it ships.</p>
+    <p style="margin-top: 18px; font-size: 13px; color: var(--ink-muted);">This link has been retired.</p>
   </div>
 
   <!-- Already claimed / expired -->
   <div class="state-screen" id="expiredView" style="display:none;">
     <div class="state-icon warn">!</div>
-    <div class="tag warn" id="expiredTag">LINK EXPIRED</div>
+    <div class="state-pill warn" id="expiredTag">Link expired</div>
     <h2 id="expiredTitle">This link is no longer active.</h2>
     <p id="expiredMsg">Each claim link is single-use and expires 14 days after being issued.</p>
-    <p style="margin-top: 20px;">Contact <a href="mailto:contact@renewera.co" style="color:var(--accent);">contact@renewera.co</a> with your Amazon order number if you need assistance.</p>
+    <p style="margin-top: 18px;">Contact <a href="mailto:contact@renewera.co">contact@renewera.co</a> with your Amazon order number if you need assistance.</p>
   </div>
 
   <!-- Invalid token -->
   <div class="state-screen" id="invalidView" style="display:none;">
     <div class="state-icon error">✕</div>
-    <div class="tag error">INVALID LINK</div>
+    <div class="state-pill error">Invalid link</div>
     <h2>Link not found.</h2>
     <p>We couldn't match this link to any claim. It may have been typed incorrectly or revoked.</p>
-    <p style="margin-top: 20px;">Open the link from your email, or contact <a href="mailto:contact@renewera.co" style="color:var(--accent);">contact@renewera.co</a>.</p>
+    <p style="margin-top: 18px;">Open the link from your email, or contact <a href="mailto:contact@renewera.co">contact@renewera.co</a>.</p>
   </div>
 
   <footer class="footer">
-    <div>© RENEWERA · ALL RIGHTS RESERVED</div>
+    <div>© Renewera · All rights reserved</div>
     <div>
-      <a href="mailto:contact@renewera.co">SUPPORT</a>
+      <a href="mailto:contact@renewera.co">Support</a>
       &nbsp;·&nbsp;
-      <a href="#">PRIVACY</a>
+      <a href="#">Privacy</a>
       &nbsp;·&nbsp;
-      <a href="#">TERMS</a>
+      <a href="#">Terms</a>
     </div>
   </footer>
 
@@ -387,7 +695,6 @@
   const VERIFY_WEBHOOK = 'https://3vsuzdkz.rcld.app/webhook/renewera-freegift-verify';
   const CLAIM_WEBHOOK = 'https://3vsuzdkz.rcld.app/webhook/renewera-freegift-claim';
 
-  // Extract token
   const urlParams = new URLSearchParams(window.location.search);
   let token = urlParams.get('token');
   if (!token) {
@@ -411,7 +718,6 @@
   const btnText = orderBtn.querySelector('.btn-text');
   const btnArrow = orderBtn.querySelector('.arrow');
 
-  // Enable Order button only when all required shipping fields are filled
   const requiredFields = ['phone', 'addr1', 'city', 'state', 'zip'];
   const checkFilled = () => {
     const allFilled = requiredFields.every(id => {
@@ -447,7 +753,7 @@
         document.getElementById('idOrder').textContent = data.amazonOrderNumber || '—';
         showView('claim');
       } else if (data.state === 'already_claimed') {
-        document.getElementById('expiredTag').textContent = 'ALREADY CLAIMED';
+        document.getElementById('expiredTag').textContent = 'Already claimed';
         document.getElementById('expiredTitle').textContent = 'This link has already been used.';
         document.getElementById('expiredMsg').textContent = 'Each claim link can only be used once. Your order is already being processed.';
         showView('expired');
@@ -455,7 +761,6 @@
         showView('invalid');
       }
     } catch (err) {
-      // Demo fallback
       document.getElementById('idName').textContent = '(demo mode)';
       document.getElementById('idEmail').textContent = 'no webhook configured';
       document.getElementById('idOrder').textContent = 'demo';
@@ -491,12 +796,11 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
         orderBtn.disabled = false;
-        btnText.textContent = 'Place Order Now';
+        btnText.textContent = 'Place order';
         btnArrow.textContent = '→';
         alert(data.error || 'Could not place order. Please try again or contact support.');
       }
     } catch (err) {
-      // Demo fallback
       showView('success');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
