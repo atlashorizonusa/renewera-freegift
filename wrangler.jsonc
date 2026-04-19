@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "renewera-freegift",
+  "compatibility_date": "2026-04-19",
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": "freegift"
+  },
+  "compatibility_flags": [
+    "nodejs_compat"
+  ]
+}
