@@ -16,10 +16,10 @@
     --ink: #2d2420;
     --ink-soft: #6b5d52;
     --ink-muted: #a0948a;
-    --accent: #c86b3c;
-    --accent-hover: #a85528;
-    --accent-soft: #f5e0d1;
-    --accent-glow: rgba(200, 107, 60, 0.12);
+    --accent: #e28a5c;
+    --accent-hover: #c47044;
+    --accent-soft: #fae5d3;
+    --accent-glow: rgba(226, 138, 92, 0.14);
     --sage: #7a9471;
     --border: #e8dfd2;
     --border-soft: #f0e6d6;
@@ -41,7 +41,7 @@
   }
   body {
     background-image:
-      radial-gradient(ellipse at top, rgba(200, 107, 60, 0.05), transparent 50%),
+      radial-gradient(ellipse at top, rgba(226, 138, 92, 0.06), transparent 50%),
       radial-gradient(ellipse at bottom right, rgba(122, 148, 113, 0.04), transparent 45%);
     background-attachment: fixed;
   }
@@ -212,11 +212,11 @@
     align-items: center;
     justify-content: center;
     gap: 10px;
-    box-shadow: 0 4px 14px rgba(200, 107, 60, 0.25);
+    box-shadow: 0 4px 14px rgba(226, 138, 92, 0.28);
   }
   .submit-btn:hover:not(:disabled) {
     background: var(--accent-hover);
-    box-shadow: 0 6px 20px rgba(200, 107, 60, 0.35);
+    box-shadow: 0 6px 20px rgba(226, 138, 92, 0.38);
   }
   .submit-btn:active:not(:disabled) { transform: translateY(1px); }
   .submit-btn:disabled {
@@ -290,7 +290,7 @@
     color: var(--accent);
     font-size: 38px;
     border-radius: 50%;
-    box-shadow: 0 0 0 8px rgba(200, 107, 60, 0.06);
+    box-shadow: 0 0 0 8px rgba(226, 138, 92, 0.07);
   }
   .success-screen h2 {
     font-family: 'Fraunces', serif;
@@ -583,7 +583,7 @@
         } else if (code === 'DISPOSABLE_EMAIL') {
           showError('Please use a real email address — disposable email providers are not allowed.');
         } else {
-          showError(data.error || 'Something went wrong. Please try again.');
+          showError("We're having a technical issue on our end. Please email contact@renewera.co with your Amazon order number and we'll send your gift manually.");
         }
         submitBtn.disabled = false;
         btnText.textContent = 'Send my claim link';
