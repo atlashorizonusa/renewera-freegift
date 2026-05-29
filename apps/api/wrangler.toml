@@ -1,0 +1,46 @@
+name = "renewera-freegift-api"
+main = "src/index.ts"
+compatibility_date = "2025-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Production route — same apex domain as the static site, so the
+# frontend can call /api/* same-origin (no CORS preflight, no
+# third-party host visible to customers).
+[[routes]]
+pattern = "renewera.co/api/*"
+zone_name = "renewera.co"
+
+[triggers]
+crons = ["0 13 * * *"]   # 13:00 UTC = 8am ET / 9am EDT — daily housekeeping
+
+[vars]
+TELEGRAM_CHAT_ID  = "-5234908131"
+RESEND_FROM       = "Renewera <contact@renewera.co>"
+CLAIM_LINK_BASE   = "https://renewera.co/freegift/claim"
+TURNSTILE_SITEKEY = "0x4AAAAAAC_ff2OrJKG-uvkK"
+ENVIRONMENT       = "production"
+
+# ───────────────────────────────────────────────────────────────
+# Staging — used for end-to-end testing before cutover.
+# Deploy with:  pnpm -F api deploy --env staging
+# ───────────────────────────────────────────────────────────────
+[env.staging]
+name = "renewera-freegift-api-staging"
+
+[env.staging.triggers]
+crons = ["0 13 * * *"]
+
+[env.staging.vars]
+TELEGRAM_CHAT_ID  = "-5234908131"
+RESEND_FROM       = "Renewera Staging <contact@renewera.co>"
+CLAIM_LINK_BASE   = "https://renewera.co/freegift/claim"
+TURNSTILE_SITEKEY = "0x4AAAAAAC_ff2OrJKG-uvkK"
+ENVIRONMENT       = "staging"
+
+# Secrets (set via `wrangler secret put NAME`):
+#   SUPABASE_URL
+#   SUPABASE_SERVICE_ROLE_KEY
+#   SUPABASE_WEBHOOK_SECRET
+#   RESEND_API_KEY
+#   TURNSTILE_SECRET_KEY
+#   TELEGRAM_BOT_TOKEN
