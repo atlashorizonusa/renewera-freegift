@@ -1,67 +1,84 @@
 # Renewera Free Gift
 
-Post-purchase gift fulfillment for Renewera (Amazon FBA heated foot/ankle massager).
-Customer scans QR on product packaging → fills the gift form → receives a
-single-use claim link → enters a shipping address → gets shipped → gets a
-tracking email.
+Post-purchase gift fulfillment for Renewera (Amazon FBA heated foot/ankle
+massager). Customer scans QR on product packaging → fills the gift form →
+receives a single-use claim link → enters a shipping address → gets shipped
+→ gets a tracking email.
 
-This repo is a monorepo: a static UI deployed to Cloudflare Pages plus a
-TypeScript Cloudflare Worker that replaces the previous n8n backend.
+The whole system runs as **one Cloudflare Worker** that serves both the
+static UI and the API on `renewera.co`, backed by a Supabase Postgres DB.
+Resend sends mail, Cloudflare Turnstile gates the form, a Telegram bot
+posts internal alerts.
 
 ## Layout
 
 ```
 apps/
-  web/                Static UI (form + claim page) — Cloudflare Pages
+  web/                Static UI — served by the Worker via [assets]
+    freegift/         Customer-facing form (index.html)
+    freegift/claim/   Claim page (entered via emailed link)
+    _redirects        / → /freegift
   api/                Cloudflare Worker (Hono + TypeScript)
     src/
-      routes/         /api/freegift/submit, verify, claim + /api/internal/shipped
+      index.ts        Hono app + scheduled (cron) handler
+      routes/         /api/freegift/{submit,verify,claim} + /api/internal/shipped
       cron/           Daily housekeeping (reminders, expiry, retries)
-      emails/         5 transactional email templates
+      emails/         5 transactional templates
       lib/            supabase, resend, turnstile, telegram, carrier, hmac, validate
-    wrangler.toml     Worker config (route, cron trigger, env vars)
+    wrangler.toml     Worker config (cron, [assets], [vars])
+    test/             vitest unit tests
 db/
-  schema.sql          Current Supabase schema (source of truth)
-  migrations/         Forward-only migrations applied via Supabase SQL editor
+  schema.sql          Current Supabase schema — source of truth
+  migrations/         Forward-only migrations, applied via Supabase SQL editor
   webhooks/           Database webhook setup docs
-.github/workflows/    CI + deploy-web + deploy-api
+docs/                 Architecture diagram + operations runbook
+.github/workflows/    CI (typecheck + tests) + manual-fallback deploy
+CLAUDE.md             Context for AI agents working on this repo
 ```
 
 ## Customer flow
 
-1. Rauf pre-inserts a row into `gift_requests` with the Amazon order number
-   (status `new`) — manual today, Amazon SP-API integration is roadmap.
+1. Rauf (or partner) pre-inserts a row into `gift_requests` with the Amazon
+   order number (status `new`).
 2. Customer scans QR → lands at `renewera.co/freegift`, fills name, email,
    order number, passes Turnstile.
-3. Worker validates, flips the row to `submitted`, sends the claim-link email
-   immediately (via `ctx.waitUntil` — UI responds in <500ms regardless).
+3. Worker validates, flips the row to `submitted`, sends the claim-link
+   email immediately via `ctx.waitUntil` (UI responds in <500ms regardless).
 4. Customer clicks the link → `renewera.co/freegift/claim?token=...` →
-   shipping form → flips the row to `ready_to_ship` → order-confirmation
-   email + Telegram alert.
+   shipping form → row flips to `ready_to_ship` → order-confirmation email
+   + Telegram alert.
 5. Rauf adds `tracking_number` to the row in Supabase. The Supabase Database
-   Webhook fires → Worker auto-detects carrier → sends shipping email →
-   flips status to `shipped`.
+   Webhook fires → Worker auto-detects carrier → shipping email → row
+   flips to `shipped`.
 
 If steps 3 or 4 stall, the daily cron handles it:
 
-- 3 days after the claim link was sent: gentle reminder
-- 7 days after: final reminder ("expires in 3 days")
-- 10 days after: PII wiped, `unique_token` regenerated, status reset to `new`
-  so the order is claimable again. `recycle_count` increments for audit.
+- 3 days after the claim link was sent: gentle reminder.
+- 7 days after: final reminder ("expires in 3 days").
+- 10 days after: PII wiped, `unique_token` regenerated, status reset to
+  `new` so the order is claimable again. `recycle_count` increments.
 
-The cron also retries any email send that `ctx.waitUntil` failed to deliver.
+The cron also retries any email send that `ctx.waitUntil` failed.
 
-## Why no every-5-min cron?
+See [`docs/architecture.md`](docs/architecture.md) for the full data-flow
+diagram.
 
-The old n8n setup polled every 5 minutes for two things: emails to send. We
-replaced both:
+## Deployment model
 
-- Claim email is now sent synchronously after the form submit (no polling).
-- Shipping email is now triggered by a Supabase Database Webhook on the
-  `tracking_number` update (event-driven, ~1s latency).
+**Cloudflare Workers Builds** auto-deploys on every push to `main`:
+- Connects to this GitHub repo, runs `pnpm install` then `npx wrangler deploy`
+  from `apps/api/`.
+- The `[assets]` block in `apps/api/wrangler.toml` points at `../web` so the
+  Worker serves both the static frontend and the API.
+- Custom Domains `renewera.co` and `www.renewera.co` are bound to this
+  Worker (set once in the dashboard).
 
-The Worker has **one** cron trigger total — daily at 13:00 UTC — for the
-new reminder/expiry logic plus a belt-and-suspenders retry sweep.
+There is **no separate Cloudflare Pages project** — Cloudflare consolidated
+Pages into Workers in late 2025. If a doc or tutorial mentions creating a
+Pages project, ignore it.
+
+The `.github/workflows/deploy-api.yml` workflow exists as a manual fallback
+only (`workflow_dispatch`). It won't fire on push.
 
 ## Local development
 
@@ -69,100 +86,74 @@ new reminder/expiry logic plus a belt-and-suspenders retry sweep.
 # one-time
 pnpm install
 
-# Worker dev server (port 8787)
+# Worker dev server (port 8787) — runs both static + API locally
 pnpm -F api dev
 
-# Type check
+# Type check + tests
 pnpm -F api typecheck
-
-# Tests
 pnpm -F api test
 ```
 
 Local secrets go in `apps/api/.dev.vars` (gitignored). See `.env.example`
-for the list of required names.
+for the names you need.
 
-To test the Pages UI locally pointing at the dev Worker, serve `apps/web`
-with any static server and override the `/api/*` URL during testing.
+## Database migrations
 
-## Deploy
-
-Push to `main`:
-
-- Any change under `apps/api/**` triggers `deploy-api.yml` (wrangler deploy).
-- Any change under `apps/web/**` triggers `deploy-web.yml` (Cloudflare Pages).
-
-Both workflows use GitHub Actions and only require two repo-level secrets:
-`CLOUDFLARE_API_TOKEN` + `CLOUDFLARE_ACCOUNT_ID`. Neither contributor needs
-local `wrangler login`.
-
-For a manual staging deploy of the Worker:
-
-```bash
-gh workflow run deploy-api.yml -f environment=staging
-```
-
-## DB migrations
-
-Apply via the Supabase dashboard's SQL editor in order:
+Apply each in order, via Supabase dashboard → SQL Editor. Each file is
+idempotent and safe to re-run.
 
 ```
 db/migrations/001_add_reminder_and_recycle.sql
 ```
 
-The file is idempotent — safe to re-run.
+## Day-to-day operations
 
-## Database webhook
-
-After applying the migration, configure the tracking-number webhook in
-Supabase. Step-by-step in `db/webhooks/README.md`.
+See [`docs/operations.md`](docs/operations.md) — runbooks for the partner:
+adding inventory, marking a row shipped, rotating secrets, viewing logs,
+debugging a stuck order, manually triggering the daily cron.
 
 ## Onboarding a new collaborator
 
-Granting full push + deploy + observability access to a partner. Done by
-Rauf once per partner.
-
 1. **GitHub** — invite to `atlashorizonusa/renewera-freegift` with **Write**.
-2. **Cloudflare** — invite to the Cloudflare account as
-   *Workers Admin + Pages Admin* (least-privilege role for deploy/log).
-3. **Supabase** — invite to the project as **Developer** (read schema, run
-   SQL, view logs; can't drop the project).
-4. **Resend** — share the API key via your team's password manager, or
-   create a per-collaborator key.
-5. **Telegram** — add to the alert chat (`-5234908131`) so they see daily
-   maintenance + failure alerts.
+2. **Cloudflare** — invite to the account as *Workers Admin*.
+3. **Supabase** — invite to the project as **Developer**.
+4. **Resend** — share the API key via password manager, or mint a per-person key.
+5. **Telegram** — add to the alerts chat (`-5234908131`).
 6. Confirm CI passes for them by opening a no-op PR.
 
-Once the above is done, the partner can ship end-to-end without Rauf in
-the loop.
+After this, the partner can ship end-to-end without Rauf in the loop.
 
-## Required GitHub Actions secrets
+## Worker secrets (set in Cloudflare dashboard)
 
-| Secret | Where to get it |
+Cloudflare → Worker → Settings → Variables and Secrets → Add (Type: Secret):
+
+| Name | Value source |
 |---|---|
-| `CLOUDFLARE_API_TOKEN` | Cloudflare dashboard → My Profile → API Tokens. Scope: Edit Workers + Pages on the renewera.co zone. |
-| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare dashboard → Workers & Pages → Overview (top right). |
-
-## Required Worker secrets
-
-Set with `wrangler secret put NAME` from `apps/api/`:
-
-| Secret | Notes |
-|---|---|
-| `SUPABASE_URL` | `https://<project>.supabase.co` |
-| `SUPABASE_SERVICE_ROLE_KEY` | Server-side only. **Never** committed. |
-| `SUPABASE_WEBHOOK_SECRET` | Random 32-byte hex. Same value also pasted into the Supabase webhook's `X-Webhook-Secret` header. |
+| `SUPABASE_URL` | Supabase → Project Settings → API → Project URL |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase → Project Settings → API → `sb_secret_…` |
+| `SUPABASE_WEBHOOK_SECRET` | `openssl rand -hex 32` — same value pasted into the Supabase webhook's `x-webhook-secret` header |
 | `RESEND_API_KEY` | resend.com → API Keys |
-| `TURNSTILE_SECRET_KEY` | Cloudflare → Turnstile → Site → Secret Key |
-| `TELEGRAM_BOT_TOKEN` | Talk to @BotFather |
+| `TURNSTILE_SECRET_KEY` | Cloudflare → Turnstile → site → Secret Key |
+| `TELEGRAM_BOT_TOKEN` | @BotFather → your bot |
+
+Plaintext vars (`TELEGRAM_CHAT_ID`, `RESEND_FROM`, `CLAIM_LINK_BASE`,
+`TURNSTILE_SITEKEY`, `ENVIRONMENT`) are committed in `wrangler.toml` and
+re-applied on every deploy.
 
 ## Rollback
 
-The cutover is reversible until n8n is deleted. To roll back:
+The cutover off n8n is reversible until the n8n workflow is deleted:
 
-1. Revert the PR that swapped the `WEBHOOK_URL` constants in the HTML files.
-2. Cloudflare Pages redeploys in ~1 min.
-3. n8n webhooks resume serving the frontend.
+1. Revert the merge commit on `main` (`git revert -m 1 <sha> && git push`).
+2. Re-enable the n8n workflow at `https://3vsuzdkz.rcld.app`.
+3. In Cloudflare, remove the Custom Domains from this Worker so the
+   frontend routes back to wherever it was before.
 
-n8n stays online (workflow paused) for ~30 days post-cutover as a safety
-net.
+n8n stays paused (not deleted) for ~30 days post-cutover as the safety net.
+
+## More
+
+- [`CLAUDE.md`](CLAUDE.md) — context for AI agents working on this repo (Claude Code, Cursor, etc.)
+- [`docs/architecture.md`](docs/architecture.md) — system diagram + decision rationale
+- [`docs/operations.md`](docs/operations.md) — partner runbook for common tasks
+- [`db/webhooks/README.md`](db/webhooks/README.md) — Supabase Database Webhook setup

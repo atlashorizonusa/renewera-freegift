@@ -1,11 +1,10 @@
 name: Deploy API (Cloudflare Worker)
 
+# Manual fallback only. Cloudflare Workers Builds is the primary
+# deploy path — it auto-runs `npx wrangler deploy` from apps/api on
+# every push to main. This workflow exists in case that breaks or
+# you want to push a staging build without touching main.
 on:
-  push:
-    branches: [main]
-    paths:
-      - "apps/api/**"
-      - ".github/workflows/deploy-api.yml"
   workflow_dispatch:
     inputs:
       environment:

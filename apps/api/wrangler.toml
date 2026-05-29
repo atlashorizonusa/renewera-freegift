@@ -12,6 +12,11 @@ not_found_handling = "404-page"
 [triggers]
 crons = ["0 13 * * *"]   # 13:00 UTC = 8am ET / 9am EDT — daily housekeeping
 
+# Real-time logs in the Cloudflare dashboard (Worker → Logs tab).
+[observability.logs]
+enabled = true
+invocation_logs = true
+
 [vars]
 TELEGRAM_CHAT_ID  = "-5234908131"
 RESEND_FROM       = "Renewera <contact@renewera.co>"
