@@ -1,14 +1,13 @@
-name = "renewera-freegift-api"
+name = "renewera-freegift"
 main = "src/index.ts"
 compatibility_date = "2025-01-01"
 compatibility_flags = ["nodejs_compat"]
 
-# Production route — same apex domain as the static site, so the
-# frontend can call /api/* same-origin (no CORS preflight, no
-# third-party host visible to customers).
-[[routes]]
-pattern = "renewera.co/api/*"
-zone_name = "renewera.co"
+# Single Worker serves the static frontend (apps/web) AND the API.
+# Static assets win first; only unmatched paths fall through to Hono.
+[assets]
+directory = "../web"
+not_found_handling = "404-page"
 
 [triggers]
 crons = ["0 13 * * *"]   # 13:00 UTC = 8am ET / 9am EDT — daily housekeeping
@@ -25,7 +24,11 @@ ENVIRONMENT       = "production"
 # Deploy with:  pnpm -F api deploy --env staging
 # ───────────────────────────────────────────────────────────────
 [env.staging]
-name = "renewera-freegift-api-staging"
+name = "renewera-freegift-staging"
+
+[env.staging.assets]
+directory = "../web"
+not_found_handling = "404-page"
 
 [env.staging.triggers]
 crons = ["0 13 * * *"]
