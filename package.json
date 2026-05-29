@@ -1,0 +1,19 @@
+{
+  "name": "renewera-freegift",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Renewera post-purchase free gift fulfillment — static UI (Cloudflare Pages) + serverless API (Cloudflare Workers) + Supabase.",
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "pnpm -F api dev",
+    "test": "pnpm -F api test",
+    "typecheck": "pnpm -F api typecheck",
+    "deploy:api": "pnpm -F api deploy"
+  },
+  "packageManager": "pnpm@9.0.0",
+  "engines": {
+    "node": ">=20"
+  }
+}
