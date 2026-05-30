@@ -208,36 +208,78 @@
     padding: 24px;
     margin-bottom: 14px;
     display: flex;
-    gap: 20px;
-    align-items: center;
+    gap: 24px;
+    align-items: flex-start;
     box-shadow: var(--shadow-md);
   }
   .product-img {
-    width: 96px;
-    height: 96px;
+    width: 140px;
+    height: 140px;
     flex-shrink: 0;
-    background: linear-gradient(135deg, var(--accent-soft), var(--bg-soft));
+    background: linear-gradient(145deg, #f5e6c8, #e8d0a0);
     border-radius: 14px;
+    border: 1px solid var(--border);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 40px;
-    color: var(--accent);
+    overflow: hidden;
   }
-  .product-info { flex: 1; }
+  .product-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 13px;
+    display: block;
+  }
+  .product-img-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+  }
+  .product-info { flex: 1; min-width: 0; }
   .product-name {
     font-family: 'Fraunces', serif;
-    font-size: 20px;
+    font-size: 17px;
     font-weight: 500;
     color: var(--ink);
-    margin-bottom: 6px;
+    margin-bottom: 10px;
     letter-spacing: -0.01em;
+    line-height: 1.35;
   }
-  .product-desc {
-    font-size: 14px;
+  .product-features {
+    list-style: none;
+    margin: 0 0 12px;
+    padding: 0;
+  }
+  .product-features li {
+    font-size: 13px;
     color: var(--ink-soft);
-    line-height: 1.5;
-    margin-bottom: 8px;
+    padding: 2px 0;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    line-height: 1.4;
+  }
+  .product-features li::before {
+    content: '✓';
+    color: var(--sage);
+    font-weight: 700;
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+  .product-price-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .price-free {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--sage);
+    letter-spacing: -0.01em;
   }
   .product-meta {
     display: inline-block;
@@ -517,8 +559,10 @@
     .card, .product-card { padding: 22px 20px; }
     .field-row { grid-template-columns: 1fr; gap: 0; }
     .field-row .field { margin-bottom: 20px; }
-    .product-card { flex-direction: column; text-align: center; }
-    .product-img { width: 80px; height: 80px; }
+    .product-card { flex-direction: column; align-items: center; text-align: center; }
+    .product-img { width: 120px; height: 120px; }
+    .product-features li { justify-content: center; }
+    .product-price-row { justify-content: center; }
   }
 </style>
 </head>
@@ -553,11 +597,33 @@
 
     <!-- Product -->
     <div class="product-card">
-      <div class="product-img">🎁</div>
+      <div class="product-img">
+        <!-- Replace with: <img src="YOUR_PRODUCT_IMAGE_URL" alt="Renewera Handheld Wood Bath Roller Massage Brush"> -->
+        <div class="product-img-placeholder">
+          <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="26" width="44" height="12" rx="6" fill="#c49a6c"/>
+            <circle cx="19" cy="32" r="7" fill="#a67c52"/>
+            <circle cx="32" cy="32" r="7" fill="#a67c52"/>
+            <circle cx="45" cy="32" r="7" fill="#a67c52"/>
+            <rect x="26" y="38" width="12" height="16" rx="3" fill="#8b6340"/>
+            <circle cx="19" cy="32" r="4" fill="#c49a6c" opacity="0.5"/>
+            <circle cx="32" cy="32" r="4" fill="#c49a6c" opacity="0.5"/>
+            <circle cx="45" cy="32" r="4" fill="#c49a6c" opacity="0.5"/>
+          </svg>
+        </div>
+      </div>
       <div class="product-info">
-        <div class="product-name" id="productName">Renewera Ankle Wrap</div>
-        <div class="product-desc" id="productDesc">A warm, supportive companion to your foot massager — a small thank-you from our team.</div>
-        <span class="product-meta">Qty 1 · Complimentary</span>
+        <div class="product-name">Renewera Handheld Wood Bath Roller Massage Brush</div>
+        <ul class="product-features">
+          <li>Natural wood construction</li>
+          <li>Deep tissue massage relief</li>
+          <li>Works on back, legs, arms &amp; feet</li>
+          <li>Promotes circulation &amp; recovery</li>
+        </ul>
+        <div class="product-price-row">
+          <span class="price-free">FREE</span>
+          <span class="product-meta">Qty 1 · Complimentary</span>
+        </div>
       </div>
     </div>
 
@@ -623,7 +689,7 @@
     <section class="card">
       <div class="card-title">Order summary</div>
       <div class="summary-row">
-        <div class="item">Renewera Ankle Wrap<small>Qty 1 · Complimentary</small></div>
+        <div class="item">Renewera Handheld Wood Bath Roller<small>Qty 1 · Complimentary</small></div>
         <div class="price free">Free</div>
       </div>
       <div class="summary-row">
