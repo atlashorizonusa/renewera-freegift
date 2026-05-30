@@ -48,7 +48,7 @@
     background-attachment: fixed;
   }
   .shell {
-    max-width: 720px;
+    max-width: 980px;
     margin: 0 auto;
     padding: 40px 24px 80px;
   }
@@ -200,37 +200,87 @@
     word-break: break-word;
   }
 
-  /* Product section */
-  .product-section {
+  /* 2-column layout */
+  .page-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: start;
+    margin-bottom: 16px;
+  }
+  .left-col { display: flex; flex-direction: column; gap: 14px; }
+  .right-col { display: flex; flex-direction: column; gap: 14px; }
+
+  /* Image carousel */
+  .img-carousel {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: 18px;
     overflow: hidden;
-    margin-bottom: 14px;
     box-shadow: var(--shadow-md);
   }
-  .product-img-wrap {
-    width: 100%;
-    height: 280px;
-    background: linear-gradient(145deg, #f0e0c0, #dfc88a);
+  .img-main {
     position: relative;
+    width: 100%;
+    padding-top: 85%;
+    background: linear-gradient(145deg, #f0e0c0, #dfc88a);
     overflow: hidden;
   }
-  .product-img-wrap img {
+  .img-main img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
   }
-  .product-img-placeholder {
+  .nav-btn {
     position: absolute;
-    inset: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    background: rgba(255,255,255,0.92);
+    border: none;
+    border-radius: 50%;
+    font-size: 22px;
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    transition: background 0.15s;
+    z-index: 2;
+    color: var(--ink);
   }
-  .product-details {
-    padding: 20px 24px 24px;
+  .nav-btn:hover { background: #fff; }
+  .nav-prev { left: 12px; }
+  .nav-next { right: 12px; }
+  .img-thumbs {
+    display: flex;
+    gap: 8px;
+    padding: 10px 14px;
+    border-top: 1px solid var(--border-soft);
+  }
+  .img-thumb {
+    width: 56px;
+    height: 56px;
+    border-radius: 8px;
+    object-fit: cover;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color 0.15s, opacity 0.15s;
+    opacity: 0.6;
+  }
+  .img-thumb.active, .img-thumb:hover { border-color: var(--accent); opacity: 1; }
+
+  /* Product info card */
+  .product-info-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 22px;
+    box-shadow: var(--shadow-md);
   }
   .product-badge {
     display: inline-block;
@@ -246,7 +296,7 @@
   }
   .product-name {
     font-family: 'Fraunces', serif;
-    font-size: 20px;
+    font-size: 19px;
     font-weight: 500;
     color: var(--ink);
     margin-bottom: 14px;
@@ -257,16 +307,14 @@
     list-style: none;
     margin: 0 0 16px;
     padding: 0;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
   }
   .product-features li {
     font-size: 13px;
     color: var(--ink-soft);
+    padding: 3px 0;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 7px;
     line-height: 1.4;
   }
   .product-features li::before {
@@ -279,8 +327,8 @@
   .product-meta-row {
     display: flex;
     align-items: center;
-    gap: 14px;
-    padding-top: 16px;
+    gap: 12px;
+    padding-top: 14px;
     border-top: 1px solid var(--border-soft);
     flex-wrap: wrap;
   }
@@ -563,12 +611,12 @@
   .footer a { color: var(--ink-soft); text-decoration: none; transition: color 0.15s; }
   .footer a:hover { color: var(--accent); }
 
-  @media (max-width: 520px) {
+  @media (max-width: 680px) {
     .shell { padding: 24px 16px 60px; }
-    .card { padding: 22px 20px; }
-    .product-img-wrap { height: 220px; }
-    .product-details { padding: 16px 20px 20px; }
-    .product-features { grid-template-columns: 1fr; }
+    .card, .product-info-card { padding: 20px 18px; }
+    .page-layout { grid-template-columns: 1fr; gap: 0; }
+    .left-col { margin-bottom: 14px; }
+    .img-main { padding-top: 70%; }
     .field-row { grid-template-columns: 1fr; gap: 0; }
     .field-row .field { margin-bottom: 20px; }
   }
@@ -603,121 +651,122 @@
       <span class="step-label">Step 3 of 3 — Final details</span>
     </div>
 
-    <!-- Product -->
-    <div class="product-section">
-      <div class="product-img-wrap">
-        <img src="/images/product.jpg" alt="Renewera Handheld Wood Bath Roller Massage Brush"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="product-img-placeholder" style="display:none">
-          <svg width="80" height="80" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="10" y="26" width="44" height="12" rx="6" fill="#c49a6c"/>
-            <circle cx="19" cy="32" r="7" fill="#a67c52"/>
-            <circle cx="32" cy="32" r="7" fill="#a67c52"/>
-            <circle cx="45" cy="32" r="7" fill="#a67c52"/>
-            <rect x="26" y="38" width="12" height="16" rx="3" fill="#8b6340"/>
-            <circle cx="19" cy="32" r="4" fill="#c49a6c" opacity="0.5"/>
-            <circle cx="32" cy="32" r="4" fill="#c49a6c" opacity="0.5"/>
-            <circle cx="45" cy="32" r="4" fill="#c49a6c" opacity="0.5"/>
-          </svg>
+    <div class="page-layout">
+
+      <!-- LEFT: carousel + product info -->
+      <div class="left-col">
+
+        <div class="img-carousel">
+          <div class="img-main">
+            <img id="carouselImg" src="/images/product.jpg" alt="Renewera Handheld Wood Bath Roller Massage Brush">
+            <button class="nav-btn nav-prev" id="prevBtn">&#8249;</button>
+            <button class="nav-btn nav-next" id="nextBtn">&#8250;</button>
+          </div>
+          <div class="img-thumbs">
+            <img src="/images/product.jpg" class="img-thumb active" data-idx="0" alt="View 1">
+            <img src="/images/1780063680787-6yhejxf2krv.jpeg" class="img-thumb" data-idx="1" alt="View 2">
+          </div>
         </div>
+
+        <div class="product-info-card">
+          <div class="product-badge">Complimentary gift</div>
+          <div class="product-name">Renewera Handheld Wood Bath Roller Massage Brush</div>
+          <ul class="product-features">
+            <li>Natural wood construction</li>
+            <li>Deep tissue massage relief</li>
+            <li>Works on back, legs &amp; arms</li>
+            <li>Promotes circulation &amp; recovery</li>
+          </ul>
+          <div class="product-meta-row">
+            <span class="price-free">FREE</span>
+            <span class="product-meta">Qty: 1</span>
+          </div>
+        </div>
+
       </div>
-      <div class="product-details">
-        <div class="product-badge">Complimentary gift</div>
-        <div class="product-name">Renewera Handheld Wood Bath Roller Massage Brush</div>
-        <ul class="product-features">
-          <li>Natural wood construction</li>
-          <li>Deep tissue massage relief</li>
-          <li>Works on back, legs &amp; arms</li>
-          <li>Promotes circulation</li>
-        </ul>
-        <div class="product-meta-row">
-          <span class="price-free">FREE</span>
-          <span class="product-meta">Qty: 1</span>
-        </div>
+
+      <!-- RIGHT: details + shipping + summary -->
+      <div class="right-col">
+
+        <section class="card">
+          <div class="card-title">Your details</div>
+          <div class="identity-row">
+            <div class="identity-label">Name</div>
+            <div class="identity-value" id="idName">—</div>
+          </div>
+          <div class="identity-row">
+            <div class="identity-label">Email</div>
+            <div class="identity-value" id="idEmail">—</div>
+          </div>
+          <div class="identity-row">
+            <div class="identity-label">Order</div>
+            <div class="identity-value" id="idOrder">—</div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-title">Shipping address</div>
+          <div class="field">
+            <label for="phone">Phone <span class="req">*</span></label>
+            <input type="tel" id="phone" required autocomplete="tel" placeholder="(555) 123-4567">
+          </div>
+          <div class="field">
+            <label for="addr1">Street address <span class="req">*</span></label>
+            <input type="text" id="addr1" required autocomplete="address-line1" placeholder="123 Main Street">
+          </div>
+          <div class="field">
+            <label for="addr2">Apt / Suite <span class="opt">optional</span></label>
+            <input type="text" id="addr2" autocomplete="address-line2" placeholder="Unit 4B">
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="city">City <span class="req">*</span></label>
+              <input type="text" id="city" required autocomplete="address-level2">
+            </div>
+            <div class="field">
+              <label for="state">State <span class="req">*</span></label>
+              <select id="state" required autocomplete="address-level1">
+                <option value="">Select…</option>
+                <option>AL</option><option>AK</option><option>AZ</option><option>AR</option><option>CA</option><option>CO</option><option>CT</option><option>DE</option><option>FL</option><option>GA</option><option>HI</option><option>ID</option><option>IL</option><option>IN</option><option>IA</option><option>KS</option><option>KY</option><option>LA</option><option>ME</option><option>MD</option><option>MA</option><option>MI</option><option>MN</option><option>MS</option><option>MO</option><option>MT</option><option>NE</option><option>NV</option><option>NH</option><option>NJ</option><option>NM</option><option>NY</option><option>NC</option><option>ND</option><option>OH</option><option>OK</option><option>OR</option><option>PA</option><option>RI</option><option>SC</option><option>SD</option><option>TN</option><option>TX</option><option>UT</option><option>VT</option><option>VA</option><option>WA</option><option>WV</option><option>WI</option><option>WY</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="zip">ZIP code <span class="req">*</span></label>
+              <input type="text" id="zip" required autocomplete="postal-code" maxlength="10" placeholder="12345">
+            </div>
+            <div class="field">
+              <label for="country">Country</label>
+              <input type="text" id="country" value="United States" readonly>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-title">Order summary</div>
+          <div class="summary-row">
+            <div class="item">Renewera Handheld Wood Bath Roller<small>Qty 1 · Complimentary</small></div>
+            <div class="price free">Free</div>
+          </div>
+          <div class="summary-row">
+            <div class="item">Shipping</div>
+            <div class="price free">Free</div>
+          </div>
+          <div class="summary-row total">
+            <div>Total</div>
+            <div class="price">$0.00</div>
+          </div>
+          <button type="button" class="order-btn" id="orderBtn" disabled>
+            <span class="btn-text">Place order</span>
+            <span class="arrow">→</span>
+          </button>
+          <div class="order-note">Single-use link · Expires after your order is placed</div>
+        </section>
+
       </div>
     </div>
 
-    <!-- Verified identity -->
-    <section class="card">
-      <div class="card-title">Your details</div>
-      <div class="identity-row">
-        <div class="identity-label">Name</div>
-        <div class="identity-value" id="idName">—</div>
-      </div>
-      <div class="identity-row">
-        <div class="identity-label">Email</div>
-        <div class="identity-value" id="idEmail">—</div>
-      </div>
-      <div class="identity-row">
-        <div class="identity-label">Order</div>
-        <div class="identity-value" id="idOrder">—</div>
-      </div>
-    </section>
-
-    <!-- Shipping address -->
-    <section class="card">
-      <div class="card-title">Shipping address</div>
-
-      <div class="field">
-        <label for="phone">Phone <span class="req">*</span></label>
-        <input type="tel" id="phone" required autocomplete="tel" placeholder="(555) 123-4567">
-      </div>
-      <div class="field">
-        <label for="addr1">Street address <span class="req">*</span></label>
-        <input type="text" id="addr1" required autocomplete="address-line1" placeholder="123 Main Street">
-      </div>
-      <div class="field">
-        <label for="addr2">Apt / Suite <span class="opt">optional</span></label>
-        <input type="text" id="addr2" autocomplete="address-line2" placeholder="Unit 4B">
-      </div>
-      <div class="field-row">
-        <div class="field">
-          <label for="city">City <span class="req">*</span></label>
-          <input type="text" id="city" required autocomplete="address-level2">
-        </div>
-        <div class="field">
-          <label for="state">State <span class="req">*</span></label>
-          <select id="state" required autocomplete="address-level1">
-            <option value="">Select…</option>
-            <option>AL</option><option>AK</option><option>AZ</option><option>AR</option><option>CA</option><option>CO</option><option>CT</option><option>DE</option><option>FL</option><option>GA</option><option>HI</option><option>ID</option><option>IL</option><option>IN</option><option>IA</option><option>KS</option><option>KY</option><option>LA</option><option>ME</option><option>MD</option><option>MA</option><option>MI</option><option>MN</option><option>MS</option><option>MO</option><option>MT</option><option>NE</option><option>NV</option><option>NH</option><option>NJ</option><option>NM</option><option>NY</option><option>NC</option><option>ND</option><option>OH</option><option>OK</option><option>OR</option><option>PA</option><option>RI</option><option>SC</option><option>SD</option><option>TN</option><option>TX</option><option>UT</option><option>VT</option><option>VA</option><option>WA</option><option>WV</option><option>WI</option><option>WY</option>
-          </select>
-        </div>
-      </div>
-      <div class="field-row">
-        <div class="field">
-          <label for="zip">ZIP code <span class="req">*</span></label>
-          <input type="text" id="zip" required autocomplete="postal-code" maxlength="10" placeholder="12345">
-        </div>
-        <div class="field">
-          <label for="country">Country</label>
-          <input type="text" id="country" value="United States" readonly>
-        </div>
-      </div>
-    </section>
-
-    <!-- Order summary -->
-    <section class="card">
-      <div class="card-title">Order summary</div>
-      <div class="summary-row">
-        <div class="item">Renewera Handheld Wood Bath Roller<small>Qty 1 · Complimentary</small></div>
-        <div class="price free">Free</div>
-      </div>
-      <div class="summary-row">
-        <div class="item">Shipping</div>
-        <div class="price free">Free</div>
-      </div>
-      <div class="summary-row total">
-        <div>Total</div>
-        <div class="price">$0.00</div>
-      </div>
-      <button type="button" class="order-btn" id="orderBtn" disabled>
-        <span class="btn-text">Place order</span>
-        <span class="arrow">→</span>
-      </button>
-      <div class="order-note">Single-use link · Expires after your order is placed</div>
-    </section>
-
-    <!-- FAQ -->
     <section class="faq-wrap">
       <h2 class="faq-title">Questions?</h2>
       <details class="faq-item"><summary>When will my gift arrive?</summary><p>Orders ship within 2–3 business days. US standard shipping takes 5–7 days after that. You'll receive a tracking email once it ships.</p></details>
@@ -883,6 +932,18 @@
   });
 
   verifyToken();
+
+  // Image carousel
+  const carouselImgs = ['/images/product.jpg', '/images/1780063680787-6yhejxf2krv.jpeg'];
+  let carouselIdx = 0;
+  function setCarousel(idx) {
+    carouselIdx = (idx + carouselImgs.length) % carouselImgs.length;
+    document.getElementById('carouselImg').src = carouselImgs[carouselIdx];
+    document.querySelectorAll('.img-thumb').forEach((t, i) => t.classList.toggle('active', i === carouselIdx));
+  }
+  document.getElementById('prevBtn').addEventListener('click', () => setCarousel(carouselIdx - 1));
+  document.getElementById('nextBtn').addEventListener('click', () => setCarousel(carouselIdx + 1));
+  document.querySelectorAll('.img-thumb').forEach((t, i) => t.addEventListener('click', () => setCarousel(i)));
 </script>
 </body>
 </html>
