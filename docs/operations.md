@@ -30,6 +30,18 @@ VALUES
 ;
 ```
 
+### Add inventory in bulk
+
+```sql
+INSERT INTO gift_requests (amazon_order_number)
+VALUES
+  ('111-1234567-1234567'),
+  ('222-1234567-1234567');
+```
+
+Only `amazon_order_number` is needed — `status` defaults to `new` and
+`unique_token` is auto-generated.
+
 ### Ship a gift (trigger the shipping email)
 
 After you physically hand the package to UPS/USPS/FedEx and get a
@@ -49,6 +61,23 @@ If you want to override the carrier detection (e.g., the auto-detect
 guessed wrong), set `carrier` and `tracking_url` in the same row edit.
 The Worker honors any non-empty values you set.
 
+### Mark a gift as delivered (trigger delivery email)
+
+After the carrier marks the package delivered:
+
+1. Supabase → Table Editor → `gift_requests` → find the row (filter by
+   `status='shipped'`).
+2. Set `delivered_at` to the current time (e.g. `now()` or the timestamp
+   shown by the carrier) → Save.
+3. Within ~5 seconds:
+   - The Supabase Database Webhook fires.
+   - A "your gift has arrived" email goes to the customer with an Amazon
+     review CTA.
+   - `status` flips to `delivered`, `delivery_email_sent_at` gets stamped.
+
+If the delivery email fails, `delivery_email_failed` is set to `true` and
+the daily cron retries it automatically.
+
 ### View live logs (debug what's happening right now)
 
 Cloudflare dashboard → Workers & Pages → `renewera-freegift` → **Logs**
@@ -67,10 +96,11 @@ open the log stream first.
 Supabase → Table Editor → `gift_requests` → filter by `email` or
 `amazon_order_number`. Check:
 
-- `status` — which step the order is at
+- `status` — which step the order is at (`new → submitted → ready_to_ship → shipped → delivered`)
 - `email_sent_at` — when the claim email went out
 - `reminder_3day_sent_at`, `reminder_7day_sent_at` — whether reminders fired
-- `claim_email_failed`, `shipping_email_failed` — whether something blew up
+- `claim_email_failed`, `shipping_email_failed`, `delivery_email_failed` — whether something blew up
+- `delivered_at`, `delivery_email_sent_at` — delivery tracking
 - `expired_at`, `recycle_count` — whether the row has been recycled (10-day expiry)
 
 ### Check whether an email actually delivered
@@ -154,6 +184,15 @@ shape.
   (suspended account, invalid recipient, etc.) and fix at the Resend
   level. Then manually clear `claim_email_failed = false` and re-run the
   cron.
+
+### Fix a stuck `shipped` row whose delivery email never went
+
+`delivery_email_failed = true` or `delivered_at` is set but `delivery_email_sent_at IS NULL`:
+
+- The daily cron retry sweep will re-send within 24h.
+- For immediate fix: manually trigger the cron (see above).
+- If it keeps failing, check resend.com logs for the actual error, fix it,
+  clear `delivery_email_failed = false`, and re-run the cron.
 
 ### Fix a stuck `ready_to_ship` row whose shipping email never went
 

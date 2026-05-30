@@ -57,6 +57,21 @@ renewera.co/api/internal/shipped           [routes/internal/shipped.ts]
   └─ UPDATE status='shipped', shipped_at, shipping_email_sent_at, carrier, tracking_url
 
 
+Rauf sets delivered_at in Supabase row (via Table Editor)
+  │
+  ▼
+Supabase Database Webhook                  [event-driven, no polling]
+  │
+  │  POST {record: {id, delivered_at, ...}, type: 'UPDATE', old_record: {...}}
+  ▼
+renewera.co/api/internal/delivered         [routes/internal/delivered.ts]
+  ├─ verify x-webhook-secret header (same secret as shipped webhook)
+  ├─ guard: only act if delivered_at just became non-null AND status='shipped'
+  │         AND delivery_email_sent_at IS NULL
+  ├─ send delivered.ts email (delivery confirmation + Amazon review CTA)
+  └─ UPDATE status='delivered', delivery_email_sent_at, delivery_email_failed=false
+
+
 Cloudflare Cron Trigger (0 13 * * *  — daily 8am ET / 9am EDT)
   │
   ▼
@@ -74,10 +89,10 @@ runDailyMaintenance(env)                    [cron/daily.ts]
   │                   sets status='new', stamps expired_at, increments
   │                   recycle_count — so the order becomes claimable again.
   │
-  └─ Retry sweep:     any row with claim_email_failed=true or
-                      shipping_email_failed=true → re-send + clear flag on success
-                      Also catches ready_to_ship rows that should have shipped
-                      but the webhook missed (belt-and-suspenders).
+  └─ Retry sweep:     any row with claim_email_failed, shipping_email_failed,
+                      or delivery_email_failed=true → re-send + clear flag.
+                      Also catches ready_to_ship/shipped rows whose webhook
+                      fired but waitUntil didn't complete (belt-and-suspenders).
 ```
 
 ## State machine
@@ -99,8 +114,13 @@ runDailyMaintenance(env)                    [cron/daily.ts]
             │ tracking_number added → Supabase webhook fires
             ▼
        ┌──────────┐
-       │ shipped  │  (terminal; customer has tracking email)
-       └──────────┘
+       │ shipped  │  (customer has tracking email; awaiting delivery)
+       └────┬─────┘
+            │ delivered_at set → Supabase webhook fires
+            ▼
+       ┌───────────┐
+       │ delivered │  (terminal; customer has delivery email + review CTA)
+       └───────────┘
 ```
 
 ## Component map
@@ -108,6 +128,7 @@ runDailyMaintenance(env)                    [cron/daily.ts]
 | Component | Lives in | Role |
 |---|---|---|
 | Static UI | `apps/web/freegift/{index,claim/index}.html` | Form + claim page, embedded CSS/JS |
+| Product images | `apps/web/images/` | Served at `/images/filename` — drop files here to publish |
 | Worker entry | `apps/api/src/index.ts` | Hono app + `scheduled` (cron) handler |
 | Routes | `apps/api/src/routes/` | Hono sub-apps for each endpoint |
 | DB client | `apps/api/src/lib/supabase.ts` | Direct PostgREST over `fetch`, no SDK |
@@ -117,7 +138,7 @@ runDailyMaintenance(env)                    [cron/daily.ts]
 | Carrier detection | `apps/api/src/lib/carrier.ts` | Regex → carrier name + tracking URL |
 | HMAC | `apps/api/src/lib/hmac.ts` | Constant-time string compare |
 | Validation | `apps/api/src/lib/validate.ts` | Order-format, email, ZIP, disposable check |
-| Email bodies | `apps/api/src/emails/*.ts` | 5 templates, plain HTML + text |
+| Email bodies | `apps/api/src/emails/*.ts` | 6 templates: claim_link, order_confirmation, reminder_3day, reminder_7day, shipped, delivered |
 | Cron handler | `apps/api/src/cron/daily.ts` | `runDailyMaintenance(env)` |
 
 ## Database tables (summary)
@@ -128,12 +149,13 @@ canonical definition. Notable columns:
 - `id` (uuid) — primary key
 - `amazon_order_number` — unique per active row
 - `unique_token` — opaque ID for the claim link; regenerated on recycle
-- `status` — `'new' | 'submitted' | 'ready_to_ship' | 'shipped'`
+- `status` — `'new' | 'submitted' | 'ready_to_ship' | 'shipped' | 'delivered'`
 - `full_name`, `email`, `phone`, `shipping_*` — customer-supplied; nullable on `new` rows
 - `email_sent_at`, `claim_email_failed` — claim-email tracking
 - `reminder_3day_sent_at`, `reminder_7day_sent_at` — cron stamps these
 - `claimed_at`, `shipped_at`, `shipping_email_sent_at`, `shipping_email_failed` — shipping tracking
 - `tracking_number`, `carrier`, `tracking_url`
+- `delivered_at`, `delivery_email_sent_at`, `delivery_email_failed` — added by migration 002
 - `expired_at`, `recycle_count` — added by migration 001
 - `submitted_at`, `created_at` — audit
 

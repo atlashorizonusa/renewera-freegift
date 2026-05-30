@@ -16,14 +16,18 @@ posts internal alerts.
 apps/
   web/                Static UI — served by the Worker via [assets]
     freegift/         Customer-facing form (index.html)
-    freegift/claim/   Claim page (entered via emailed link)
+    freegift/claim/   Claim page — 2-col layout: image carousel + form
+    images/           Product images served at /images/filename (drop files here)
+    _headers          Cache-Control: no-store for HTML pages
     _redirects        / → /freegift
   api/                Cloudflare Worker (Hono + TypeScript)
     src/
       index.ts        Hono app + scheduled (cron) handler
-      routes/         /api/freegift/{submit,verify,claim} + /api/internal/shipped
+      routes/         /api/freegift/{submit,verify,claim}
+                      /api/internal/{shipped,delivered}
       cron/           Daily housekeeping (reminders, expiry, retries)
-      emails/         5 transactional templates
+      emails/         6 transactional templates (claim_link, order_confirmation,
+                      reminder_3day, reminder_7day, shipped, delivered)
       lib/            supabase, resend, turnstile, telegram, carrier, hmac, validate
     wrangler.toml     Worker config (cron, [assets], [vars])
     test/             vitest unit tests
@@ -50,6 +54,9 @@ CLAUDE.md             Context for AI agents working on this repo
 5. Rauf adds `tracking_number` to the row in Supabase. The Supabase Database
    Webhook fires → Worker auto-detects carrier → shipping email → row
    flips to `shipped`.
+6. Rauf sets `delivered_at` on the row once delivery is confirmed. A second
+   Supabase webhook fires → delivery confirmation email + Amazon review CTA
+   → row flips to `delivered`.
 
 If steps 3 or 4 stall, the daily cron handles it:
 
@@ -104,6 +111,7 @@ idempotent and safe to re-run.
 
 ```
 db/migrations/001_add_reminder_and_recycle.sql
+db/migrations/002_add_delivered.sql
 ```
 
 ## Day-to-day operations
