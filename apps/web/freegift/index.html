@@ -535,7 +535,22 @@
     e.preventDefault();
     clearError();
 
+    const fullName = document.getElementById('fullName').value.trim();
+    const email = document.getElementById('email').value.trim().toLowerCase();
     const orderNum = document.getElementById('orderNum').value.trim();
+
+    if (!fullName) {
+      showError("Your full name can't be empty.");
+      return;
+    }
+    if (!email) {
+      showError("Email address can't be empty.");
+      return;
+    }
+    if (!orderNum) {
+      showError("Amazon order number can't be empty.");
+      return;
+    }
     if (!/^\d{3}-\d{7}-\d{7}$/.test(orderNum)) {
       showError('Invalid Amazon order number. Expected format: 123-4567890-1234567');
       return;
@@ -544,8 +559,8 @@
     const turnstileToken = (typeof turnstile !== 'undefined') ? turnstile.getResponse() : 'dev-bypass';
 
     const payload = {
-      fullName: document.getElementById('fullName').value.trim(),
-      email: document.getElementById('email').value.trim().toLowerCase(),
+      fullName,
+      email,
       amazonOrderNumber: orderNum,
       turnstileToken: turnstileToken,
       submittedAt: new Date().toISOString()
