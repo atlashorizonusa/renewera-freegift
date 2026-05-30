@@ -1,0 +1,8 @@
+/*.html
+  Cache-Control: no-store
+
+/freegift/*
+  Cache-Control: no-store
+
+/freegift/claim/*
+  Cache-Control: no-store
