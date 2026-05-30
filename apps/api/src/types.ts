@@ -16,7 +16,7 @@ export interface Env {
 }
 
 // ── DB rows ────────────────────────────────────────────────────
-export type GiftStatus = "new" | "submitted" | "ready_to_ship" | "shipped";
+export type GiftStatus = "new" | "submitted" | "ready_to_ship" | "shipped" | "delivered";
 
 export interface GiftRequest {
   id: string;
@@ -49,6 +49,9 @@ export interface GiftRequest {
   recycle_count: number;
   claim_email_failed: boolean;
   shipping_email_failed: boolean;
+  delivered_at: string | null;
+  delivery_email_sent_at: string | null;
+  delivery_email_failed: boolean;
 }
 
 // ── Wire payloads ──────────────────────────────────────────────

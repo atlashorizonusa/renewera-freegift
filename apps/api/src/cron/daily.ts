@@ -6,6 +6,7 @@ import { buildClaimLinkEmail } from "../emails/claim_link";
 import { buildReminder3DayEmail } from "../emails/reminder_3day";
 import { buildReminder7DayEmail } from "../emails/reminder_7day";
 import { deliverShippingEmail } from "../routes/internal/shipped";
+import { deliverDeliveryEmail } from "../routes/internal/delivered";
 
 interface Tally {
   reminders3day: number;
@@ -13,6 +14,7 @@ interface Tally {
   expired: number;
   claimRetries: number;
   shippingRetries: number;
+  deliveryRetries: number;
   failures: number;
 }
 
@@ -27,6 +29,7 @@ export async function runDailyMaintenance(env: Env): Promise<Tally> {
     expired: 0,
     claimRetries: 0,
     shippingRetries: 0,
+    deliveryRetries: 0,
     failures: 0,
   };
 
@@ -34,6 +37,7 @@ export async function runDailyMaintenance(env: Env): Promise<Tally> {
   await sweepExpired(env, db, tally);
   await retryFailedClaimEmails(env, db, tally);
   await retryFailedShippingEmails(env, db, tally);
+  await retryFailedDeliveryEmails(env, db, tally);
 
   await sendTelegram(
     env,
@@ -43,6 +47,7 @@ export async function runDailyMaintenance(env: Env): Promise<Tally> {
       `• Expired & recycled: ${tally.expired}\n` +
       `• Claim email retries: ${tally.claimRetries}\n` +
       `• Shipping email retries: ${tally.shippingRetries}\n` +
+      `• Delivery email retries: ${tally.deliveryRetries}\n` +
       `• Failures: ${tally.failures}`,
   );
 
@@ -143,6 +148,22 @@ async function retryFailedShippingEmails(env: Env, db: Supabase, tally: Tally) {
       tally.shippingRetries++;
     } catch (err) {
       console.error("shipping retry failed", err);
+      tally.failures++;
+    }
+  }
+}
+
+async function retryFailedDeliveryEmails(env: Env, db: Supabase, tally: Tally) {
+  const rows = await db.selectMany<GiftRequest>(
+    "gift_requests",
+    `select=*&or=(delivery_email_failed.eq.true,and(status.eq.shipped,delivered_at.not.is.null,delivery_email_sent_at.is.null))`,
+  );
+  for (const row of rows) {
+    try {
+      await deliverDeliveryEmail(env, row);
+      tally.deliveryRetries++;
+    } catch (err) {
+      console.error("delivery retry failed", err);
       tally.failures++;
     }
   }
