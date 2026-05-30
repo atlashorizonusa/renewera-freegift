@@ -1,0 +1,273 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Renewera Free Gift API",
+    "version": "1.0.0",
+    "description": "Post-purchase gift fulfillment API for Renewera"
+  },
+  "servers": [
+    { "url": "https://renewera.co" }
+  ],
+  "paths": {
+    "/api/health": {
+      "get": {
+        "summary": "Health check",
+        "operationId": "getHealth",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": { "type": "boolean" },
+                    "env": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/freegift/submit": {
+      "post": {
+        "summary": "Submit gift claim form (Step 1)",
+        "operationId": "submitGiftForm",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["fullName", "email", "amazonOrderNumber", "turnstileToken"],
+                "properties": {
+                  "fullName": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "maxLength": 320
+                  },
+                  "amazonOrderNumber": {
+                    "type": "string",
+                    "pattern": "^\\d{3}-\\d{7}-\\d{7}$"
+                  },
+                  "turnstileToken": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Claim email sent",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "message": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Validation error" },
+          "429": { "description": "Rate limited" }
+        }
+      }
+    },
+    "/api/freegift/verify": {
+      "post": {
+        "summary": "Verify claim token (Step 2)",
+        "operationId": "verifyClaimToken",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["token"],
+                "properties": {
+                  "token": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{32}$"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Token state",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "state": {
+                      "type": "string",
+                      "enum": ["valid", "already_claimed", "invalid", "not_found"]
+                    },
+                    "fullName": { "type": "string" },
+                    "email": { "type": "string" },
+                    "amazonOrderNumber": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/freegift/claim": {
+      "post": {
+        "summary": "Submit shipping address (Step 3)",
+        "operationId": "submitShippingAddress",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["token", "phone", "line1", "city", "state", "zip"],
+                "properties": {
+                  "token": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{32}$"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "minLength": 7,
+                    "maxLength": 30
+                  },
+                  "line1": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200
+                  },
+                  "line2": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "city": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 100
+                  },
+                  "state": {
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 2
+                  },
+                  "zip": {
+                    "type": "string",
+                    "pattern": "^\\d{5}(-\\d{4})?$"
+                  },
+                  "country": {
+                    "type": "string",
+                    "default": "US",
+                    "maxLength": 2
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Order confirmed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "message": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Invalid token or already claimed" }
+        }
+      }
+    },
+    "/api/internal/shipped": {
+      "post": {
+        "summary": "Supabase webhook — tracking number added",
+        "operationId": "webhookShipped",
+        "security": [{ "WebhookSecret": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "type": { "type": "string", "enum": ["INSERT", "UPDATE", "DELETE"] },
+                  "table": { "type": "string" },
+                  "record": { "type": "object" },
+                  "old_record": { "type": "object" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Processed or skipped" },
+          "401": { "description": "Invalid webhook secret" }
+        }
+      }
+    },
+    "/api/internal/delivered": {
+      "post": {
+        "summary": "Supabase webhook — delivered_at set",
+        "operationId": "webhookDelivered",
+        "security": [{ "WebhookSecret": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "type": { "type": "string", "enum": ["INSERT", "UPDATE", "DELETE"] },
+                  "table": { "type": "string" },
+                  "record": { "type": "object" },
+                  "old_record": { "type": "object" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Processed or skipped" },
+          "401": { "description": "Invalid webhook secret" }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "WebhookSecret": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-webhook-secret"
+      }
+    }
+  }
+}
