@@ -1,5 +1,3 @@
-// Input validators lifted from the n8n "Validate & Normalize" Code node.
-
 export const ORDER_RE = /^\d{3}-\d{7}-\d{7}$/;
 export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export const ZIP_RE = /^\d{5}(-\d{4})?$/;

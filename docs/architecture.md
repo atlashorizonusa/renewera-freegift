@@ -163,8 +163,8 @@ over `fetch` is ~80 lines in `lib/supabase.ts`.
 
 Lets the form respond `200` immediately while the (slower) Resend API call
 finishes after the response. The customer sees a fast confirmation; the
-email arrives a few seconds later. n8n needed a cron to safety-net this
-pattern because of webhook restart semantics — Workers don't.
+email arrives a few seconds later. The daily cron's retry sweep covers
+the rare case where `ctx.waitUntil` doesn't complete.
 
 ### Why a daily cron instead of every-5-min?
 

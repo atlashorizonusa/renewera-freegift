@@ -142,14 +142,10 @@ re-applied on every deploy.
 
 ## Rollback
 
-The cutover off n8n is reversible until the n8n workflow is deleted:
+If a bad deploy needs reverting:
 
-1. Revert the merge commit on `main` (`git revert -m 1 <sha> && git push`).
-2. Re-enable the n8n workflow at `https://3vsuzdkz.rcld.app`.
-3. In Cloudflare, remove the Custom Domains from this Worker so the
-   frontend routes back to wherever it was before.
-
-n8n stays paused (not deleted) for ~30 days post-cutover as the safety net.
+1. Cloudflare → Worker → **Deployments** → find the previous good version → **Rollback to this version**. Live within ~10 seconds.
+2. For a deeper revert, `git revert <sha> && git push` — Workers Builds redeploys.
 
 ## More
 

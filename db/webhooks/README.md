@@ -5,8 +5,6 @@ adds a `tracking_number` to a `gift_requests` row in the Supabase
 dashboard, Supabase fires an HTTP POST to the Worker, which sends
 the shipping email and flips status to `shipped`.
 
-This eliminates the every-5-minute polling cron that n8n used.
-
 ## Setup (one-time, via Supabase dashboard)
 
 1. Open **Database → Webhooks → Create a new hook**.

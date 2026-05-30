@@ -8,8 +8,7 @@
 --    * 10-day expiry sweep (PII wipe + status recycle to 'new')
 --    * Retry sweep for failed claim / shipping emails
 --
---  Additive only. Existing n8n workflow continues to function
---  during the cutover window (it ignores the new columns).
+--  Additive only — safe to apply against a live table.
 --
 --  Apply via Supabase SQL editor. Idempotent — safe to re-run.
 -- ============================================================

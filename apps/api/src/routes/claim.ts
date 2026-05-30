@@ -92,7 +92,7 @@ async function postClaimWork(env: Env, db: Supabase, row: GiftRequest) {
     );
   }
 
-  // Telegram notify (count active claims first, matches n8n Box 4b)
+  // Telegram notify (count active claims first)
   let claimsTotal = 0;
   try {
     const rows = await db.selectMany<{ count: number }>(

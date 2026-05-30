@@ -1,5 +1,4 @@
 // Auto-detect carrier from a tracking number, return label + URL.
-// Lift-from-n8n: same regex rules used by the merged workflow's Box 5.
 
 export interface CarrierInfo {
   carrier: string;

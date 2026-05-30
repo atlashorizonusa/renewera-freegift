@@ -13,9 +13,6 @@ fills a form with their order number, gets a claim link, fills shipping
 details, and ultimately gets a "shipped" email with a tracking link. See
 `README.md` for the customer-journey detail.
 
-It used to run on n8n (a no-code workflow tool) with a polling cron every
-5 minutes. It was migrated to a single Cloudflare Worker in May 2026.
-
 ## Deployment model — the most important thing to know
 
 **One Worker. One deploy. One domain.**
