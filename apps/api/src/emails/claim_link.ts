@@ -23,38 +23,29 @@ Questions? Reply to this email or write contact@renewera.co.
 
 — The Renewera team`;
 
-  // Minimal div-based HTML — no tables, no colored sections, no buttons.
-  // Intentionally close to plain text visually so Gmail routes to Primary.
+  // Intentionally minimal — just <p> tags, no containers, no layout.
+  // Renders like a personal Gmail compose email. Keeps Primary routing.
   const html = `<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-</head>
-<body style="margin:0;padding:32px 16px;background:#ffffff;font-family:Georgia,serif;font-size:16px;line-height:1.7;color:#222222;max-width:520px;margin-left:auto;margin-right:auto;">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;font-size:15px;line-height:1.7;color:#1a1a1a;margin:0;padding:0;">
 
-  <div style="margin-bottom:32px;padding-bottom:16px;border-bottom:1px solid #dddddd;">
-    <span style="font-family:-apple-system,Arial,sans-serif;font-size:13px;font-weight:600;letter-spacing:0.08em;color:#888888;text-transform:uppercase;">Renewera</span>
-  </div>
+<p style="margin:0 0 18px;">Hi ${firstName},</p>
 
-  <p style="margin:0 0 20px;">Hi ${firstName},</p>
+<p style="margin:0 0 18px;color:#444444;">We noticed you recently purchased the Renewera foot massager (order&nbsp;<code style="font-size:13px;background:#f4f4f4;padding:2px 6px;border-radius:3px;color:#555;">${orderNum}</code>). If you're enjoying it, a quick honest review on Amazon would mean a lot to us — it helps small US companies like ours grow.</p>
 
-  <p style="margin:0 0 20px;">We noticed you recently purchased the Renewera foot massager (order&nbsp;<span style="font-family:'Courier New',monospace;font-size:14px;color:#555555;">${orderNum}</span>). If you're enjoying it, a quick honest review on Amazon would mean the world to us — it helps small US companies like ours grow.</p>
+<p style="margin:0 0 24px;"><a href="https://www.amazon.com/your-orders" style="color:#1a1a1a;font-weight:600;text-decoration:underline;">Leave a review on Amazon &rarr;</a></p>
 
-  <p style="margin:0 0 28px;"><a href="https://www.amazon.com/your-orders" style="color:#222222;font-weight:bold;text-decoration:underline;">Leave a review on Amazon &rarr;</a></p>
+<p style="margin:0 0 18px;color:#444444;">As a thank-you for being a customer, we'd like to send you a complimentary <strong style="color:#1a1a1a;">Renewera Handheld Wood Bath Roller Massage Brush</strong>. Enter your shipping address below and we'll send it right away.</p>
 
-  <div style="margin-bottom:28px;padding:0;border-top:1px solid #eeeeee;"></div>
+<p style="margin:0 0 8px;"><a href="${claimUrl}" style="color:#1a1a1a;font-weight:600;text-decoration:underline;">Enter your shipping address &rarr;</a></p>
 
-  <p style="margin:0 0 20px;">As a thank-you for being a customer, we'd like to send you a complimentary <strong>Renewera Handheld Wood Bath Roller Massage Brush</strong>. Click the link below to enter your shipping address — we'll send it out right away.</p>
+<p style="margin:0 0 24px;font-size:12px;color:#aaaaaa;word-break:break-all;">${claimUrl}</p>
 
-  <p style="margin:0 0 8px;"><a href="${claimUrl}" style="color:#222222;font-weight:bold;text-decoration:underline;">Enter your shipping address &rarr;</a></p>
+<p style="margin:0 0 6px;font-size:13px;color:#aaaaaa;">This link is single-use and expires in 14 days.</p>
+<p style="margin:0 0 24px;font-size:13px;color:#aaaaaa;">Questions? Reply to this email or write <a href="mailto:contact@renewera.co" style="color:#aaaaaa;">contact@renewera.co</a></p>
 
-  <p style="margin:0 0 28px;font-family:-apple-system,Arial,sans-serif;font-size:12px;color:#aaaaaa;word-break:break-all;">${claimUrl}</p>
-
-  <div style="margin-bottom:24px;padding:0;border-top:1px solid #eeeeee;"></div>
-
-  <p style="margin:0 0 4px;font-family:-apple-system,Arial,sans-serif;font-size:13px;color:#aaaaaa;">This link is single-use and expires in 14 days.</p>
-  <p style="margin:0;font-family:-apple-system,Arial,sans-serif;font-size:13px;color:#aaaaaa;">Questions? Reply to this email or write <a href="mailto:contact@renewera.co" style="color:#aaaaaa;">contact@renewera.co</a></p>
+<p style="margin:0;font-size:13px;color:#aaaaaa;">— The Renewera team</p>
 
 </body>
 </html>`;
