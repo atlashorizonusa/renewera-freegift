@@ -3,7 +3,7 @@ import type { Env } from "../types";
 export interface EmailMessage {
   to: string;
   subject: string;
-  html: string;
+  html?: string;
   text: string;
 }
 
@@ -18,7 +18,7 @@ export async function sendEmail(env: Env, msg: EmailMessage): Promise<{ id: stri
       from: env.RESEND_FROM,
       to: [msg.to],
       subject: msg.subject,
-      html: msg.html,
+      ...(msg.html ? { html: msg.html } : {}),
       text: msg.text,
     }),
   });

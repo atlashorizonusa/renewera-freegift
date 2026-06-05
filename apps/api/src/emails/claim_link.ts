@@ -90,6 +90,5 @@ Questions? Reply to this email or write contact@renewera.co.
     to: email,
     subject: `Following up on your order ${orderNum}`,
     text,
-    html,
   };
 }
