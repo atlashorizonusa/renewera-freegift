@@ -30,20 +30,24 @@ app.post("/", async (c) => {
     return c.json({ error: "bad payload" }, 400);
   }
 
-  const row = payload.record;
-  if (!row?.id) return c.json({ error: "no record" }, 400);
+  const hint = payload.record;
+  if (!hint?.id) return c.json({ error: "no record" }, 400);
 
-  // Guard: only act when delivered_at was just set on a shipped row
-  // and we haven't already sent the delivery email.
+  // Guard using minimal hint fields sent by the trigger.
   const oldDeliveredAt = payload.old_record?.delivered_at ?? null;
   if (
-    !row.delivered_at ||
-    row.status !== "shipped" ||
-    row.delivery_email_sent_at ||
-    oldDeliveredAt === row.delivered_at
+    !hint.delivered_at ||
+    hint.status !== "shipped" ||
+    hint.delivery_email_sent_at ||
+    oldDeliveredAt === hint.delivered_at
   ) {
     return c.json({ skipped: true });
   }
+
+  // Fetch full row so email has all fields (name, address, etc.).
+  const db = new Supabase(env);
+  const row = await db.selectOne<GiftRequest>("gift_requests", `id=eq.${hint.id}`);
+  if (!row) return c.json({ skipped: true });
 
   await deliverDeliveryEmail(env, row);
   return c.json({ ok: true });

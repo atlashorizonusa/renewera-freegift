@@ -34,19 +34,24 @@ app.post("/", async (c) => {
     return c.json({ error: "bad payload" }, 400);
   }
 
-  const row = payload.record;
-  if (!row?.id) return c.json({ error: "no record" }, 400);
+  const hint = payload.record;
+  if (!hint?.id) return c.json({ error: "no record" }, 400);
 
-  // Guard: only act if tracking was just added on a ready_to_ship row.
+  // Guard using minimal hint fields sent by the trigger.
   const oldTracking = payload.old_record?.tracking_number ?? null;
   if (
-    !row.tracking_number ||
-    row.status !== "ready_to_ship" ||
-    row.shipping_email_sent_at ||
-    oldTracking === row.tracking_number
+    !hint.tracking_number ||
+    hint.status !== "ready_to_ship" ||
+    hint.shipping_email_sent_at ||
+    oldTracking === hint.tracking_number
   ) {
     return c.json({ skipped: true });
   }
+
+  // Fetch full row so email has all fields (name, address, etc.).
+  const db = new Supabase(env);
+  const row = await db.selectOne<GiftRequest>("gift_requests", `id=eq.${hint.id}`);
+  if (!row) return c.json({ skipped: true });
 
   await deliverShippingEmail(env, row);
   return c.json({ ok: true });
