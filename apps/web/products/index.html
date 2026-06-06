@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shop — Renewera</title>
+<meta name="description" content="Shop Renewera wellness tools — the Heated Foot & Ankle Massager.">
+<link rel="icon" href="/media/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/site.css">
+</head>
+<body>
+
+<header class="nav scrolled" id="nav">
+  <div class="wrap nav-inner">
+    <a href="/" aria-label="Renewera home"><img class="logo-img" src="/media/logo.png" alt="Renewera"></a>
+    <nav class="nav-links" id="navLinks">
+      <a href="/products">Shop</a>
+      <a href="/#why">Why Renewera</a>
+      <a href="/#reviews">Reviews</a>
+      <a href="/about">About</a>
+      <a href="/cart" class="cart-link" aria-label="Cart">🛒<span class="cart-count" hidden>0</span></a>
+      <a href="/products" class="btn btn-primary nav-cta">Shop Now</a>
+    </nav>
+    <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="wrap">
+    <div class="breadcrumb"><a href="/">Home</a> / Shop</div>
+    <h1 class="serif">Shop Renewera</h1>
+    <p>Wellness tools designed to help you recover and feel renewed.</p>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="product-grid">
+
+    <div class="pcard reveal" data-product>
+      <a href="/products/heated-ankle-massager" class="pimg"><img src="/media/Main2.png" alt="Renewera Heated Foot & Ankle Massager"></a>
+      <div class="pbody">
+        <span class="ptag">Bestseller</span>
+        <h3 class="serif"><a href="/products/heated-ankle-massager">Heated Foot &amp; Ankle Massager</a></h3>
+        <p class="pdesc">Cordless wrap with 5 heating modes &amp; 3 vibration levels for soothing ankle and foot relief.</p>
+        <div class="pactions">
+          <a href="/products/heated-ankle-massager" class="btn btn-ghost" style="flex:1">View</a>
+          <button class="btn btn-primary" style="flex:1"
+            data-add-to-cart data-id="heated-ankle-massager"
+            data-name="Heated Foot &amp; Ankle Massager" data-image="/media/Main2.png">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <img class="logo-img" src="/media/logo.png" alt="Renewera">
+        <p>Thoughtfully crafted wellness tools that help you unwind, recover, and feel renewed — every day.</p>
+      </div>
+      <div class="foot-col"><h4>Shop</h4><a href="/products">All Products</a><a href="/products/heated-ankle-massager">Ankle Massager</a><a href="/cart">Cart</a></div>
+      <div class="foot-col"><h4>Company</h4><a href="/about">About Us</a><a href="/#why">Why Renewera</a><a href="/contact">Contact</a></div>
+      <div class="foot-col"><h4>Support</h4><a href="mailto:contact@renewera.co">contact@renewera.co</a><a href="/privacy">Privacy Policy</a><a href="/terms">Terms</a></div>
+    </div>
+    <div class="foot-bottom"><span>© <span id="yr"></span> Renewera. All rights reserved.</span><span>Made with care in the USA</span></div>
+  </div>
+</footer>
+
+<script src="/js/cart.js"></script>
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+  const burger=document.getElementById('burger'),links=document.getElementById('navLinks');
+  burger.addEventListener('click',()=>links.classList.toggle('open'));
+  const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.15});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

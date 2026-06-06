@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Your Cart — Renewera</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/media/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/site.css">
+</head>
+<body>
+
+<header class="nav scrolled" id="nav">
+  <div class="wrap nav-inner">
+    <a href="/" aria-label="Renewera home"><img class="logo-img" src="/media/logo.png" alt="Renewera"></a>
+    <nav class="nav-links" id="navLinks">
+      <a href="/products">Shop</a>
+      <a href="/#why">Why Renewera</a>
+      <a href="/#reviews">Reviews</a>
+      <a href="/about">About</a>
+      <a href="/cart" class="cart-link" aria-label="Cart">🛒<span class="cart-count" hidden>0</span></a>
+      <a href="/products" class="btn btn-primary nav-cta">Shop Now</a>
+    </nav>
+    <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<section class="cart-wrap">
+  <div class="wrap">
+    <div class="breadcrumb"><a href="/">Home</a> / Cart</div>
+    <h1 class="serif" style="font-size:clamp(30px,4vw,44px);margin-bottom:28px">Your Cart</h1>
+    <div id="cartRoot"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <img class="logo-img" src="/media/logo.png" alt="Renewera">
+        <p>Thoughtfully crafted wellness tools that help you unwind, recover, and feel renewed — every day.</p>
+      </div>
+      <div class="foot-col"><h4>Shop</h4><a href="/products">All Products</a><a href="/products/heated-ankle-massager">Ankle Massager</a><a href="/cart">Cart</a></div>
+      <div class="foot-col"><h4>Company</h4><a href="/about">About Us</a><a href="/#why">Why Renewera</a><a href="/contact">Contact</a></div>
+      <div class="foot-col"><h4>Support</h4><a href="mailto:contact@renewera.co">contact@renewera.co</a><a href="/privacy">Privacy Policy</a><a href="/terms">Terms</a></div>
+    </div>
+    <div class="foot-bottom"><span>© <span id="yr"></span> Renewera. All rights reserved.</span><span>Made with care in the USA</span></div>
+  </div>
+</footer>
+
+<script src="/js/cart.js"></script>
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+  const burger=document.getElementById('burger'),links=document.getElementById('navLinks');
+  burger.addEventListener('click',()=>links.classList.toggle('open'));
+
+  const root = document.getElementById('cartRoot');
+
+  function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+  function render(){
+    const items = ReneweraCart.items();
+    if(!items.length){
+      root.innerHTML = `
+        <div class="cart-empty">
+          <div class="big">🛒</div>
+          <h3 class="serif" style="font-size:24px;margin-bottom:8px">Your cart is empty</h3>
+          <p style="margin-bottom:22px">Looks like you haven't added anything yet.</p>
+          <a href="/products" class="btn btn-primary">Shop Now →</a>
+        </div>`;
+      return;
+    }
+    const totalQty = items.reduce((n,i)=>n+i.qty,0);
+    const rows = items.map(i=>`
+      <div class="citem">
+        <div class="cimg"><img src="${esc(i.image)}" alt="${esc(i.name)}"></div>
+        <div>
+          <h4 class="serif">${esc(i.name)}</h4>
+          <div class="qty" style="margin:6px 0">
+            <button type="button" data-dec="${esc(i.id)}" aria-label="Decrease">−</button>
+            <input type="text" value="${i.qty}" data-qty="${esc(i.id)}" inputmode="numeric" aria-label="Quantity">
+            <button type="button" data-inc="${esc(i.id)}" aria-label="Increase">+</button>
+          </div>
+          <button class="crm" data-remove="${esc(i.id)}">Remove</button>
+        </div>
+        <div style="font-weight:600;color:var(--ink-soft)">×${i.qty}</div>
+      </div>`).join('');
+
+    root.innerHTML = `
+      <div class="cart-grid">
+        <div class="cart-items">${rows}</div>
+        <div class="cart-summary">
+          <h3 class="serif">Order Summary</h3>
+          <p style="color:var(--ink-soft);font-size:14px">${totalQty} item${totalQty>1?'s':''} in your cart</p>
+          <p class="note">🔒 Renewera sells through Amazon. Click below to complete your purchase securely on Amazon — pricing and checkout are handled there.</p>
+          <a href="${ReneweraCart.checkoutUrl}" class="btn btn-primary btn-block" style="margin-bottom:10px">Checkout with Amazon →</a>
+          <a href="/products" class="btn btn-ghost btn-block">Continue shopping</a>
+        </div>
+      </div>`;
+  }
+
+  // Delegated controls
+  root.addEventListener('click',(e)=>{
+    const dec=e.target.closest('[data-dec]'), inc=e.target.closest('[data-inc]'), rm=e.target.closest('[data-remove]');
+    if(dec){const id=dec.dataset.dec;const it=ReneweraCart.items().find(x=>x.id===id);ReneweraCart.setQty(id,(it?it.qty:1)-1);render();}
+    if(inc){const id=inc.dataset.inc;const it=ReneweraCart.items().find(x=>x.id===id);ReneweraCart.setQty(id,(it?it.qty:1)+1);render();}
+    if(rm){ReneweraCart.remove(rm.dataset.remove);render();}
+  });
+  root.addEventListener('change',(e)=>{
+    const q=e.target.closest('[data-qty]');
+    if(q){let v=parseInt(q.value,10);if(isNaN(v)||v<0)v=1;ReneweraCart.setQty(q.dataset.qty,v);render();}
+  });
+
+  render();
+</script>
+</body>
+</html>

@@ -3,154 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Renewera — Handcrafted Wellness for Everyday Recovery</title>
-<meta name="description" content="Renewera designs natural wellness tools that help you unwind, recover, and feel renewed. Shop the collection.">
+<title>Renewera — Heated Foot &amp; Ankle Massager</title>
+<meta name="description" content="Renewera's Heated Foot & Ankle Massager soothes tension with warmth and vibration. Cordless, rechargeable, and made for everyday recovery.">
+<link rel="icon" href="/media/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --red:#d62828; --red-dk:#a4161a; --red-soft:#fbecec; --red-tint:#fdf5f5;
-    --white:#ffffff; --off:#fdfbfb; --ink:#1f1c1c; --ink-soft:#6e6363;
-    --line:#f0e3e3; --gold:#d62828;
-    --serif:'Fraunces',Georgia,serif; --sans:'Inter',-apple-system,sans-serif;
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
-  body{font-family:var(--sans);color:var(--ink);background:var(--white);line-height:1.6;-webkit-font-smoothing:antialiased;}
-  img{max-width:100%;display:block}
-  a{color:inherit;text-decoration:none}
-  .wrap{max-width:1180px;margin:0 auto;padding:0 24px}
-  .serif{font-family:var(--serif)}
-
-  /* ── Buttons ── */
-  .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:999px;font-weight:600;font-size:15px;cursor:pointer;border:1.5px solid transparent;transition:transform .2s ease,box-shadow .2s ease,background .2s ease,color .2s ease;}
-  .btn:hover{transform:translateY(-2px)}
-  .btn-primary{background:var(--red);color:#fff;box-shadow:0 8px 24px rgba(214,40,40,.3);}
-  .btn-primary:hover{background:var(--red-dk);box-shadow:0 12px 30px rgba(164,22,26,.38);}
-  .btn-ghost{background:transparent;color:var(--red);border-color:var(--red);}
-  .btn-ghost:hover{background:var(--red);color:#fff;}
-
-  /* ── Nav ── */
-  header.nav{position:fixed;top:0;left:0;right:0;z-index:50;transition:background .3s ease,box-shadow .3s ease,padding .3s ease;padding:20px 0;}
-  header.nav.scrolled{background:rgba(255,255,255,.94);backdrop-filter:blur(10px);box-shadow:0 1px 0 var(--line);padding:12px 0;}
-  .nav-inner{display:flex;align-items:center;justify-content:space-between}
-  .logo{font-family:var(--serif);font-weight:600;font-size:24px;letter-spacing:.02em;color:var(--ink)}
-  .logo span{color:var(--red)}
-  .nav-links{display:flex;align-items:center;gap:32px}
-  .nav-links a{font-size:15px;font-weight:500;color:var(--ink-soft);transition:color .2s}
-  .nav-links a:hover{color:var(--ink)}
-  .nav-cta{padding:10px 20px;font-size:14px}
-  .burger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer}
-  .burger span{width:24px;height:2px;background:var(--ink);transition:.3s}
-
-  /* ── Hero ── */
-  .hero{padding:160px 0 90px;position:relative;overflow:hidden;background:linear-gradient(180deg,var(--red-tint),var(--white));}
-  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
-  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--red-dk);background:var(--red-soft);padding:7px 16px;border-radius:999px;margin-bottom:24px}
-  .hero h1{font-family:var(--serif);font-weight:600;font-size:clamp(40px,5.5vw,68px);line-height:1.05;letter-spacing:-.02em;margin-bottom:22px}
-  .hero h1 em{font-style:italic;color:var(--red)}
-  .hero p.lead{font-size:19px;color:var(--ink-soft);max-width:480px;margin-bottom:34px}
-  .hero-cta{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:28px}
-  .hero-trust{display:flex;align-items:center;gap:18px;font-size:14px;color:var(--ink-soft)}
-  .stars{color:var(--red);letter-spacing:2px}
-  .hero-visual{position:relative}
-  .hero-visual .blob{position:absolute;inset:-8% -6% -8% -6%;background:radial-gradient(circle at 60% 40%,var(--red-soft),#f7d4d4);border-radius:46% 54% 58% 42%/52% 44% 56% 48%;z-index:0;animation:morph 14s ease-in-out infinite}
-  .hero-visual img{position:relative;z-index:1;border-radius:24px;box-shadow:0 30px 60px rgba(164,22,26,.16);animation:float 6s ease-in-out infinite}
-  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
-  @keyframes morph{0%,100%{border-radius:46% 54% 58% 42%/52% 44% 56% 48%}50%{border-radius:56% 44% 42% 58%/46% 56% 44% 54%}}
-
-  /* ── Marquee trust bar ── */
-  .trustbar{background:var(--red);color:#fff;padding:16px 0;overflow:hidden;white-space:nowrap}
-  .trustbar .track{display:inline-flex;gap:48px;animation:scroll 26s linear infinite;font-size:14px;font-weight:500;letter-spacing:.04em}
-  .trustbar .track span{opacity:.95}
-  @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-
-  /* ── Sections ── */
-  section{position:relative}
-  .section-pad{padding:96px 0}
-  .section-head{text-align:center;max-width:620px;margin:0 auto 56px}
-  .section-head .eyebrow{margin-bottom:18px}
-  .section-head h2{font-family:var(--serif);font-weight:600;font-size:clamp(30px,4vw,46px);line-height:1.1;letter-spacing:-.02em;margin-bottom:16px}
-  .section-head p{font-size:17px;color:var(--ink-soft)}
-
-  /* ── Features ── */
-  .features{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-  .feature{background:var(--off);border:1px solid var(--line);border-radius:18px;padding:34px 28px;transition:transform .3s ease,box-shadow .3s ease}
-  .feature:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(164,22,26,.08)}
-  .feature .ico{width:54px;height:54px;border-radius:14px;background:var(--red-soft);display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:18px}
-  .feature h3{font-family:var(--serif);font-weight:600;font-size:21px;margin-bottom:8px}
-  .feature p{color:var(--ink-soft);font-size:15px}
-
-  /* ── Product spotlight ── */
-  .spotlight{background:var(--red-tint)}
-  .spot-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
-  .spot-img{border-radius:24px;overflow:hidden;box-shadow:0 24px 50px rgba(164,22,26,.14)}
-  .spot-img img{width:100%;aspect-ratio:4/3;object-fit:cover}
-  .price{display:flex;align-items:baseline;gap:12px;margin:18px 0 26px}
-  .price .now{font-family:var(--serif);font-size:38px;font-weight:600}
-  .price .was{font-size:20px;color:var(--ink-soft);text-decoration:line-through}
-  .price .save{font-size:13px;font-weight:600;color:#fff;background:var(--red);padding:4px 12px;border-radius:999px}
-  .checklist{list-style:none;margin:24px 0;display:grid;gap:12px}
-  .checklist li{display:flex;gap:10px;font-size:15px;color:var(--ink-soft)}
-  .checklist li::before{content:"✓";color:var(--red);font-weight:700}
-
-  /* ── Testimonials ── */
-  .testimonials{background:var(--white)}
-  .tcards{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-  .tcard{background:var(--off);border:1px solid var(--line);border-radius:18px;padding:30px 26px}
-  .tcard .stars{font-size:16px;margin-bottom:14px}
-  .tcard p{font-size:15px;color:var(--ink);margin-bottom:18px}
-  .tcard .who{display:flex;align-items:center;gap:12px}
-  .tcard .av{width:42px;height:42px;border-radius:50%;background:var(--red-soft);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--red-dk)}
-  .tcard .who b{display:block;font-size:14px}
-  .tcard .who small{color:var(--ink-soft);font-size:12px}
-
-  /* ── CTA banner ── */
-  .ctabanner{background:linear-gradient(120deg,var(--red),var(--red-dk));color:#fff;text-align:center;padding:80px 0}
-  .ctabanner h2{font-family:var(--serif);font-weight:600;font-size:clamp(28px,4vw,42px);margin-bottom:14px}
-  .ctabanner p{font-size:18px;opacity:.95;max-width:540px;margin:0 auto 30px}
-  .ctabanner .btn-light{background:#fff;color:var(--red-dk)}
-  .ctabanner .btn-light:hover{background:var(--ink);color:#fff}
-
-  /* ── Footer ── */
-  footer{background:var(--off);color:var(--ink-soft);padding:64px 0 28px;font-size:14px;border-top:1px solid var(--line)}
-  .foot-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:40px;margin-bottom:44px}
-  .foot-grid .logo{color:var(--ink);margin-bottom:14px}
-  .foot-grid p{max-width:260px}
-  .foot-col h4{color:var(--ink);font-size:13px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px}
-  .foot-col a{display:block;margin-bottom:10px;color:var(--ink-soft);transition:color .2s}
-  .foot-col a:hover{color:var(--red)}
-  .foot-bottom{border-top:1px solid var(--line);padding-top:22px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;color:var(--ink-soft)}
-
-  /* ── Reveal animation ── */
-  .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
-  .reveal.in{opacity:1;transform:none}
-
-  /* ── Responsive ── */
-  @media(max-width:900px){
-    .hero-grid,.spot-grid{grid-template-columns:1fr;gap:36px}
-    .features,.tcards{grid-template-columns:1fr}
-    .foot-grid{grid-template-columns:1fr 1fr}
-    .nav-links{position:fixed;inset:0 0 0 30%;background:var(--white);flex-direction:column;justify-content:center;padding:40px;transform:translateX(100%);transition:transform .3s ease;box-shadow:-10px 0 40px rgba(0,0,0,.1)}
-    .nav-links.open{transform:none}
-    .burger{display:flex;z-index:60}
-    .hero{padding:130px 0 70px}
-  }
-</style>
+<link rel="stylesheet" href="/css/site.css">
 </head>
 <body>
 
 <!-- NAV -->
 <header class="nav" id="nav">
   <div class="wrap nav-inner">
-    <a href="/" class="logo">Renewera<span>.</span></a>
+    <a href="/" aria-label="Renewera home"><img class="logo-img" src="/media/logo.png" alt="Renewera"></a>
     <nav class="nav-links" id="navLinks">
-      <a href="/#product">Shop</a>
+      <a href="/products">Shop</a>
       <a href="/#why">Why Renewera</a>
       <a href="/#reviews">Reviews</a>
       <a href="/about">About</a>
-      <a href="SHOP_URL_PLACEHOLDER" class="btn btn-primary nav-cta">Shop Now</a>
+      <a href="/cart" class="cart-link" aria-label="Cart">🛒<span class="cart-count" hidden>0</span></a>
+      <a href="/products" class="btn btn-primary nav-cta">Shop Now</a>
     </nav>
     <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
   </div>
@@ -161,11 +34,11 @@
   <div class="wrap hero-grid">
     <div class="hero-copy">
       <span class="eyebrow">★ Trusted by thousands</span>
-      <h1 class="serif">Everyday recovery,<br><em>naturally renewed.</em></h1>
-      <p class="lead">Thoughtfully crafted wellness tools designed to melt away tension, boost circulation, and bring a little ritual of calm to your day.</p>
+      <h1 class="serif">Soothe tired ankles,<br><em>naturally renewed.</em></h1>
+      <p class="lead">The Renewera Heated Foot &amp; Ankle Massager wraps you in soothing warmth and gentle vibration — cordless, rechargeable, and made for everyday recovery.</p>
       <div class="hero-cta">
-        <a href="SHOP_URL_PLACEHOLDER" class="btn btn-primary">Shop Now →</a>
-        <a href="/#product" class="btn btn-ghost">Explore product</a>
+        <a href="/products" class="btn btn-primary">Shop Now →</a>
+        <a href="/#why" class="btn btn-ghost">Why Renewera</a>
       </div>
       <div class="hero-trust">
         <span class="stars">★★★★★</span>
@@ -174,7 +47,7 @@
     </div>
     <div class="hero-visual">
       <div class="blob"></div>
-      <img src="/media/hero.svg" alt="Renewera wellness product">
+      <img src="/media/Main2.png" alt="Renewera Heated Foot & Ankle Massager">
     </div>
   </div>
 </section>
@@ -182,8 +55,8 @@
 <!-- TRUST MARQUEE -->
 <div class="trustbar">
   <div class="track">
-    <span>🌿 Premium Materials</span><span>✦ Fast Shipping</span><span>💆 Relieves Muscle Tension</span><span>♻️ Sustainably Made</span><span>🤍 Loved by Thousands</span>
-    <span>🌿 Premium Materials</span><span>✦ Fast Shipping</span><span>💆 Relieves Muscle Tension</span><span>♻️ Sustainably Made</span><span>🤍 Loved by Thousands</span>
+    <span>🔥 5 Heating Modes</span><span>📳 3 Vibration Levels</span><span>🔋 1800mAh Rechargeable</span><span>⏱️ Auto Shut-Off</span><span>🦶 Full Ankle Coverage</span>
+    <span>🔥 5 Heating Modes</span><span>📳 3 Vibration Levels</span><span>🔋 1800mAh Rechargeable</span><span>⏱️ Auto Shut-Off</span><span>🦶 Full Ankle Coverage</span>
   </div>
 </div>
 
@@ -192,13 +65,13 @@
   <div class="wrap">
     <div class="section-head reveal">
       <span class="eyebrow">Why Renewera</span>
-      <h2 class="serif">Wellness, beautifully made</h2>
-      <p>Every Renewera tool is crafted to feel as good as it looks — built to last and made to help you feel renewed.</p>
+      <h2 class="serif">Relief that wraps around you</h2>
+      <p>Designed to ease ankle and foot tension with the comforting combination of heat and massage — wherever you need it.</p>
     </div>
     <div class="features">
-      <div class="feature reveal"><div class="ico">🌿</div><h3 class="serif">Premium Materials</h3><p>Made from carefully selected, skin-friendly materials with a smooth, refined finish — quality you can feel.</p></div>
-      <div class="feature reveal"><div class="ico">💆</div><h3 class="serif">Real Tension Relief</h3><p>Contoured design targets tired muscles and pressure points to ease tension and boost circulation.</p></div>
-      <div class="feature reveal"><div class="ico">✨</div><h3 class="serif">A Daily Ritual</h3><p>Turn a few quiet minutes into a restorative habit — after a long day, post-workout, or before bed.</p></div>
+      <div class="feature reveal"><div class="ico">🔥</div><h3 class="serif">Soothing Heat</h3><p>Five adjustable heating modes (40–60°C) deliver warmth that relaxes stiff joints and eases tension.</p></div>
+      <div class="feature reveal"><div class="ico">📳</div><h3 class="serif">Targeted Vibration</h3><p>Three vibration levels provide a gentle massage that helps stimulate circulation and recovery.</p></div>
+      <div class="feature reveal"><div class="ico">🔋</div><h3 class="serif">Cordless Freedom</h3><p>A rechargeable 1800mAh battery and auto shut-off let you relax anywhere — no wires, no worries.</p></div>
     </div>
   </div>
 </section>
@@ -206,24 +79,19 @@
 <!-- PRODUCT SPOTLIGHT -->
 <section class="section-pad spotlight" id="product">
   <div class="wrap spot-grid">
-    <div class="spot-img reveal"><img src="/media/product.svg" alt="Renewera product"></div>
+    <div class="spot-img reveal"><img src="/media/Listing2.png" alt="Renewera Heated Foot & Ankle Massager easing foot discomfort"></div>
     <div class="reveal">
       <span class="eyebrow">Bestseller</span>
-      <h2 class="serif" style="font-size:clamp(28px,3.6vw,40px);line-height:1.1;margin:14px 0 4px">Renewera Foot &amp; Body Massager</h2>
-      <div class="price">
-        <span class="now serif">$24.99</span>
-        <span class="was">$34.99</span>
-        <span class="save">Save 29%</span>
-      </div>
-      <p style="color:var(--ink-soft)">Designed to soothe, stimulate circulation, and turn recovery into a relaxing daily ritual.</p>
+      <h2 class="serif" style="font-size:clamp(28px,3.6vw,40px);line-height:1.1;margin:14px 0 14px">Heated Foot &amp; Ankle Massager</h2>
+      <p style="color:var(--ink-soft)">Wrap-around comfort that eases sore soles, heel pain, foot fatigue, and ankle stiffness — your daily recovery ritual.</p>
       <ul class="checklist">
-        <li>Premium, skin-friendly materials</li>
-        <li>Targeted massage for real tension relief</li>
-        <li>Ergonomic, easy to use anywhere</li>
-        <li>Backed by our customer-first support</li>
+        <li>5 heating modes &amp; 3 vibration levels</li>
+        <li>1800mAh rechargeable battery, fully cordless</li>
+        <li>Large clear display &amp; 30-minute auto shut-off</li>
+        <li>Adjustable strap for full ankle coverage</li>
       </ul>
       <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:8px">
-        <a href="SHOP_URL_PLACEHOLDER" class="btn btn-primary">Buy Now →</a>
+        <a href="/products/heated-ankle-massager" class="btn btn-primary">View product →</a>
       </div>
     </div>
   </div>
@@ -237,9 +105,9 @@
       <h2 class="serif">Renewed, in their words</h2>
     </div>
     <div class="tcards">
-      <div class="tcard reveal"><div class="stars">★★★★★</div><p>"So relaxing after a long day on my feet. Feels premium and it actually helps with the tension in my calves."</p><div class="who"><div class="av">SM</div><div><b>Sarah M.</b><small>Verified Buyer</small></div></div></div>
-      <div class="tcard reveal"><div class="stars">★★★★★</div><p>"Beautiful craftsmanship. I use it every morning — it's become a part of my routine I look forward to."</p><div class="who"><div class="av">DK</div><div><b>David K.</b><small>Verified Buyer</small></div></div></div>
-      <div class="tcard reveal"><div class="stars">★★★★★</div><p>"Bought one, loved it, bought three more as gifts. Renewera's support was wonderful too. Highly recommend."</p><div class="who"><div class="av">AL</div><div><b>Amanda L.</b><small>Verified Buyer</small></div></div></div>
+      <div class="tcard reveal"><div class="stars">★★★★★</div><p>"The heat is so relaxing on my ankles after work. It actually helps with the stiffness and I love that it's cordless."</p><div class="who"><div class="av">SM</div><div><b>Sarah M.</b><small>Verified Buyer</small></div></div></div>
+      <div class="tcard reveal"><div class="stars">★★★★★</div><p>"Great for my foot fatigue. The vibration plus warmth combo feels like a real massage. Battery lasts plenty long."</p><div class="who"><div class="av">DK</div><div><b>David K.</b><small>Verified Buyer</small></div></div></div>
+      <div class="tcard reveal"><div class="stars">★★★★★</div><p>"Bought one, loved it, bought more as gifts. Renewera's support was wonderful too. Highly recommend."</p><div class="who"><div class="av">AL</div><div><b>Amanda L.</b><small>Verified Buyer</small></div></div></div>
     </div>
   </div>
 </section>
@@ -249,7 +117,7 @@
   <div class="wrap reveal">
     <h2 class="serif">Feel the difference</h2>
     <p>Join thousands who've made Renewera part of their daily recovery ritual.</p>
-    <a href="SHOP_URL_PLACEHOLDER" class="btn btn-light">Shop Now →</a>
+    <a href="/products" class="btn btn-light">Shop Now →</a>
   </div>
 </section>
 
@@ -258,14 +126,14 @@
   <div class="wrap">
     <div class="foot-grid">
       <div>
-        <div class="logo">Renewera<span style="color:var(--red)">.</span></div>
+        <img class="logo-img" src="/media/logo.png" alt="Renewera">
         <p>Thoughtfully crafted wellness tools that help you unwind, recover, and feel renewed — every day.</p>
       </div>
       <div class="foot-col">
         <h4>Shop</h4>
-        <a href="SHOP_URL_PLACEHOLDER">Shop Now</a>
-        <a href="/#product">Our Product</a>
-        <a href="/#reviews">Reviews</a>
+        <a href="/products">All Products</a>
+        <a href="/products/heated-ankle-massager">Ankle Massager</a>
+        <a href="/cart">Cart</a>
       </div>
       <div class="foot-col">
         <h4>Company</h4>
@@ -287,6 +155,7 @@
   </div>
 </footer>
 
+<script src="/js/cart.js"></script>
 <script>
   document.getElementById('yr').textContent = new Date().getFullYear();
   const nav = document.getElementById('nav');

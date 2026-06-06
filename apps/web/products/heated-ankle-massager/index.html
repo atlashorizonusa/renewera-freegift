@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Heated Foot &amp; Ankle Massager — Renewera</title>
+<meta name="description" content="Renewera Heated Foot & Ankle Massager — cordless, 5 heating modes, 3 vibration levels. Soothes sore soles, heel pain, foot fatigue and ankle stiffness.">
+<link rel="icon" href="/media/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/site.css">
+</head>
+<body>
+
+<header class="nav scrolled" id="nav">
+  <div class="wrap nav-inner">
+    <a href="/" aria-label="Renewera home"><img class="logo-img" src="/media/logo.png" alt="Renewera"></a>
+    <nav class="nav-links" id="navLinks">
+      <a href="/products">Shop</a>
+      <a href="/#why">Why Renewera</a>
+      <a href="/#reviews">Reviews</a>
+      <a href="/about">About</a>
+      <a href="/cart" class="cart-link" aria-label="Cart">🛒<span class="cart-count" hidden>0</span></a>
+      <a href="/products" class="btn btn-primary nav-cta">Shop Now</a>
+    </nav>
+    <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<section class="pdp">
+  <div class="wrap">
+    <div class="breadcrumb"><a href="/">Home</a> / <a href="/products">Shop</a> / Heated Foot &amp; Ankle Massager</div>
+    <div class="pdp-grid" data-product>
+
+      <!-- Gallery -->
+      <div class="gallery">
+        <div class="main-img"><img id="mainImg" src="/media/Main2.png" alt="Renewera Heated Foot & Ankle Massager"></div>
+        <div class="thumbs" id="thumbs">
+          <div class="thumb active"><img src="/media/Main2.png" alt=""></div>
+          <div class="thumb"><img src="/media/Listing1.png" alt=""></div>
+          <div class="thumb"><img src="/media/Listing2.png" alt=""></div>
+          <div class="thumb"><img src="/media/Listing3.png" alt=""></div>
+          <div class="thumb"><img src="/media/Listing4.png" alt=""></div>
+          <div class="thumb"><img src="/media/Listing5.png" alt=""></div>
+        </div>
+      </div>
+
+      <!-- Info -->
+      <div>
+        <span class="eyebrow">Bestseller</span>
+        <h1 class="serif">Heated Foot &amp; Ankle Massager</h1>
+        <div class="rating"><span class="stars">★★★★★</span><span>4.8/5 · Verified buyers</span></div>
+        <p class="desc">Wrap your ankles in soothing warmth and gentle vibration. Renewera's cordless massager eases sore soles, heel pain, foot fatigue, and ankle stiffness — your daily recovery ritual, anywhere.</p>
+        <ul class="checklist">
+          <li>5 heating modes (40–60°C) for custom comfort</li>
+          <li>3 vibration levels for targeted relief</li>
+          <li>1800mAh rechargeable battery — fully cordless</li>
+          <li>Large clear display &amp; 30-minute auto shut-off</li>
+          <li>Adjustable strap for full ankle coverage</li>
+        </ul>
+
+        <div class="qty-row">
+          <div class="qty">
+            <button type="button" id="qtyMinus" aria-label="Decrease">−</button>
+            <input type="text" id="qtyInput" value="1" inputmode="numeric" aria-label="Quantity">
+            <button type="button" id="qtyPlus" aria-label="Increase">+</button>
+          </div>
+          <span style="color:var(--ink-soft);font-size:14px">In stock · ships fast</span>
+        </div>
+
+        <div class="pdp-cta">
+          <button class="btn btn-primary" style="min-width:200px"
+            data-add-to-cart data-id="heated-ankle-massager"
+            data-name="Heated Foot &amp; Ankle Massager" data-image="/media/Main2.png">Add to Cart</button>
+          <a href="/cart" class="btn btn-ghost">Go to Cart →</a>
+        </div>
+        <p style="font-size:13px;color:var(--ink-soft);margin-top:16px">🔒 Secure checkout completed through Amazon.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <img class="logo-img" src="/media/logo.png" alt="Renewera">
+        <p>Thoughtfully crafted wellness tools that help you unwind, recover, and feel renewed — every day.</p>
+      </div>
+      <div class="foot-col"><h4>Shop</h4><a href="/products">All Products</a><a href="/products/heated-ankle-massager">Ankle Massager</a><a href="/cart">Cart</a></div>
+      <div class="foot-col"><h4>Company</h4><a href="/about">About Us</a><a href="/#why">Why Renewera</a><a href="/contact">Contact</a></div>
+      <div class="foot-col"><h4>Support</h4><a href="mailto:contact@renewera.co">contact@renewera.co</a><a href="/privacy">Privacy Policy</a><a href="/terms">Terms</a></div>
+    </div>
+    <div class="foot-bottom"><span>© <span id="yr"></span> Renewera. All rights reserved.</span><span>Made with care in the USA</span></div>
+  </div>
+</footer>
+
+<script src="/js/cart.js"></script>
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+  const burger=document.getElementById('burger'),links=document.getElementById('navLinks');
+  burger.addEventListener('click',()=>links.classList.toggle('open'));
+
+  // Gallery
+  const mainImg=document.getElementById('mainImg');
+  document.querySelectorAll('#thumbs .thumb').forEach(t=>{
+    t.addEventListener('click',()=>{
+      document.querySelectorAll('#thumbs .thumb').forEach(x=>x.classList.remove('active'));
+      t.classList.add('active');
+      mainImg.src=t.querySelector('img').src;
+    });
+  });
+
+  // Quantity
+  const qi=document.getElementById('qtyInput');
+  const clamp=()=>{let v=parseInt(qi.value,10);if(isNaN(v)||v<1)v=1;if(v>99)v=99;qi.value=v;};
+  document.getElementById('qtyMinus').addEventListener('click',()=>{qi.value=Math.max(1,(parseInt(qi.value,10)||1)-1);});
+  document.getElementById('qtyPlus').addEventListener('click',()=>{qi.value=Math.min(99,(parseInt(qi.value,10)||1)+1);});
+  qi.addEventListener('input',clamp);
+</script>
+</body>
+</html>
