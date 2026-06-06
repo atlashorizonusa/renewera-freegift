@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Renewera — Handcrafted Wellness for Everyday Recovery</title>
+<meta name="description" content="Renewera designs natural wood massage tools that help you unwind, recover, and feel renewed. Discover the Handheld Wood Bath Roller Massage Brush.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#fdf8f2; --cream-2:#fffcf8; --sand:#f5ebdd; --sand-2:#faf1de;
+    --peach:#fae5d3; --terra:#e28a5c; --terra-dk:#c47044; --gold:#c99a3c;
+    --ink:#2d2420; --ink-soft:#6b5d52; --line:#e8dfd2; --white:#ffffff;
+    --serif:'Fraunces',Georgia,serif; --sans:'Inter',-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--sans);color:var(--ink);background:var(--cream);line-height:1.6;-webkit-font-smoothing:antialiased;}
+  img{max-width:100%;display:block}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+  .serif{font-family:var(--serif)}
+
+  /* ── Buttons ── */
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:999px;font-weight:600;font-size:15px;cursor:pointer;border:1.5px solid transparent;transition:transform .2s ease,box-shadow .2s ease,background .2s ease;}
+  .btn:hover{transform:translateY(-2px)}
+  .btn-primary{background:var(--terra);color:#fff;box-shadow:0 8px 24px rgba(226,138,92,.35);}
+  .btn-primary:hover{background:var(--terra-dk);box-shadow:0 12px 30px rgba(196,112,68,.4);}
+  .btn-ghost{background:transparent;color:var(--ink);border-color:var(--ink);}
+  .btn-ghost:hover{background:var(--ink);color:#fff;}
+
+  /* ── Nav ── */
+  header.nav{position:fixed;top:0;left:0;right:0;z-index:50;transition:background .3s ease,box-shadow .3s ease,padding .3s ease;padding:20px 0;}
+  header.nav.scrolled{background:rgba(253,248,242,.92);backdrop-filter:blur(10px);box-shadow:0 1px 0 var(--line);padding:12px 0;}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between}
+  .logo{font-family:var(--serif);font-weight:600;font-size:24px;letter-spacing:.02em;color:var(--ink)}
+  .logo span{color:var(--terra)}
+  .nav-links{display:flex;align-items:center;gap:32px}
+  .nav-links a{font-size:15px;font-weight:500;color:var(--ink-soft);transition:color .2s}
+  .nav-links a:hover{color:var(--ink)}
+  .nav-cta{padding:10px 20px;font-size:14px}
+  .burger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer}
+  .burger span{width:24px;height:2px;background:var(--ink);transition:.3s}
+
+  /* ── Hero ── */
+  .hero{padding:160px 0 90px;position:relative;overflow:hidden}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--terra-dk);background:var(--peach);padding:7px 16px;border-radius:999px;margin-bottom:24px}
+  .hero h1{font-family:var(--serif);font-weight:600;font-size:clamp(40px,5.5vw,68px);line-height:1.05;letter-spacing:-.02em;margin-bottom:22px}
+  .hero h1 em{font-style:italic;color:var(--terra)}
+  .hero p.lead{font-size:19px;color:var(--ink-soft);max-width:480px;margin-bottom:34px}
+  .hero-cta{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:28px}
+  .hero-trust{display:flex;align-items:center;gap:18px;font-size:14px;color:var(--ink-soft)}
+  .stars{color:var(--gold);letter-spacing:2px}
+  .hero-visual{position:relative}
+  .hero-visual .blob{position:absolute;inset:-8% -6% -8% -6%;background:radial-gradient(circle at 60% 40%,var(--sand-2),var(--peach));border-radius:46% 54% 58% 42%/52% 44% 56% 48%;z-index:0;animation:morph 14s ease-in-out infinite}
+  .hero-visual img{position:relative;z-index:1;border-radius:24px;box-shadow:0 30px 60px rgba(45,36,32,.18);animation:float 6s ease-in-out infinite}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+  @keyframes morph{0%,100%{border-radius:46% 54% 58% 42%/52% 44% 56% 48%}50%{border-radius:56% 44% 42% 58%/46% 56% 44% 54%}}
+
+  /* ── Marquee trust bar ── */
+  .trustbar{background:var(--ink);color:#f5ebdd;padding:16px 0;overflow:hidden;white-space:nowrap}
+  .trustbar .track{display:inline-flex;gap:48px;animation:scroll 26s linear infinite;font-size:14px;font-weight:500;letter-spacing:.04em}
+  .trustbar .track span{opacity:.85}
+  @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  /* ── Sections ── */
+  section{position:relative}
+  .section-pad{padding:96px 0}
+  .section-head{text-align:center;max-width:620px;margin:0 auto 56px}
+  .section-head .eyebrow{margin-bottom:18px}
+  .section-head h2{font-family:var(--serif);font-weight:600;font-size:clamp(30px,4vw,46px);line-height:1.1;letter-spacing:-.02em;margin-bottom:16px}
+  .section-head p{font-size:17px;color:var(--ink-soft)}
+
+  /* ── Features ── */
+  .features{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .feature{background:var(--cream-2);border:1px solid var(--line);border-radius:18px;padding:34px 28px;transition:transform .3s ease,box-shadow .3s ease}
+  .feature:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(45,36,32,.08)}
+  .feature .ico{width:54px;height:54px;border-radius:14px;background:var(--peach);display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:18px}
+  .feature h3{font-family:var(--serif);font-weight:600;font-size:21px;margin-bottom:8px}
+  .feature p{color:var(--ink-soft);font-size:15px}
+
+  /* ── Product spotlight ── */
+  .spotlight{background:var(--sand)}
+  .spot-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+  .spot-img{border-radius:24px;overflow:hidden;box-shadow:0 24px 50px rgba(45,36,32,.15)}
+  .spot-img img{width:100%;aspect-ratio:4/3;object-fit:cover}
+  .price{display:flex;align-items:baseline;gap:12px;margin:18px 0 26px}
+  .price .now{font-family:var(--serif);font-size:38px;font-weight:600}
+  .price .was{font-size:20px;color:var(--ink-soft);text-decoration:line-through}
+  .price .save{font-size:13px;font-weight:600;color:var(--terra-dk);background:var(--peach);padding:4px 12px;border-radius:999px}
+  .checklist{list-style:none;margin:24px 0;display:grid;gap:12px}
+  .checklist li{display:flex;gap:10px;font-size:15px;color:var(--ink-soft)}
+  .checklist li::before{content:"✓";color:var(--terra);font-weight:700}
+
+  /* ── Testimonials ── */
+  .testimonials{background:var(--cream-2)}
+  .tcards{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .tcard{background:var(--cream);border:1px solid var(--line);border-radius:18px;padding:30px 26px}
+  .tcard .stars{font-size:16px;margin-bottom:14px}
+  .tcard p{font-size:15px;color:var(--ink);margin-bottom:18px}
+  .tcard .who{display:flex;align-items:center;gap:12px}
+  .tcard .av{width:42px;height:42px;border-radius:50%;background:var(--peach);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--terra-dk)}
+  .tcard .who b{display:block;font-size:14px}
+  .tcard .who small{color:var(--ink-soft);font-size:12px}
+
+  /* ── Gift banner ── */
+  .giftbanner{background:linear-gradient(120deg,var(--terra),var(--gold));color:#fff;text-align:center;padding:80px 0}
+  .giftbanner h2{font-family:var(--serif);font-weight:600;font-size:clamp(28px,4vw,42px);margin-bottom:14px}
+  .giftbanner p{font-size:18px;opacity:.95;max-width:540px;margin:0 auto 30px}
+  .giftbanner .btn-light{background:#fff;color:var(--terra-dk)}
+  .giftbanner .btn-light:hover{background:var(--ink);color:#fff}
+
+  /* ── Footer ── */
+  footer{background:var(--ink);color:#cbbfb2;padding:64px 0 28px;font-size:14px}
+  .foot-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:40px;margin-bottom:44px}
+  .foot-grid .logo{color:#fff;margin-bottom:14px}
+  .foot-grid p{max-width:260px;color:#9c8f81}
+  .foot-col h4{color:#fff;font-size:13px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px}
+  .foot-col a{display:block;margin-bottom:10px;color:#cbbfb2;transition:color .2s}
+  .foot-col a:hover{color:#fff}
+  .foot-bottom{border-top:1px solid #3a342e;padding-top:22px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;color:#8a7d6f}
+
+  /* ── Reveal animation ── */
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  /* ── Responsive ── */
+  @media(max-width:900px){
+    .hero-grid,.spot-grid{grid-template-columns:1fr;gap:36px}
+    .features,.tcards{grid-template-columns:1fr}
+    .foot-grid{grid-template-columns:1fr 1fr}
+    .nav-links{position:fixed;inset:0 0 0 30%;background:var(--cream-2);flex-direction:column;justify-content:center;padding:40px;transform:translateX(100%);transition:transform .3s ease;box-shadow:-10px 0 40px rgba(0,0,0,.1)}
+    .nav-links.open{transform:none}
+    .burger{display:flex;z-index:60}
+    .hero{padding:130px 0 70px}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<header class="nav" id="nav">
+  <div class="wrap nav-inner">
+    <a href="/" class="logo">Renewera<span>.</span></a>
+    <nav class="nav-links" id="navLinks">
+      <a href="/#product">Shop</a>
+      <a href="/#why">Why Renewera</a>
+      <a href="/#reviews">Reviews</a>
+      <a href="/freegift">Free Gift</a>
+      <a href="AMAZON_URL_PLACEHOLDER" class="btn btn-primary nav-cta" target="_blank" rel="noopener">Buy on Amazon</a>
+    </nav>
+    <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <span class="eyebrow">★ Trusted by thousands on Amazon</span>
+      <h1 class="serif">Everyday recovery,<br><em>naturally renewed.</em></h1>
+      <p class="lead">Handcrafted wooden wellness tools designed to melt away tension, boost circulation, and bring a little ritual of calm to your day.</p>
+      <div class="hero-cta">
+        <a href="AMAZON_URL_PLACEHOLDER" class="btn btn-primary" target="_blank" rel="noopener">Buy on Amazon →</a>
+        <a href="/freegift" class="btn btn-ghost">Claim your free gift</a>
+      </div>
+      <div class="hero-trust">
+        <span class="stars">★★★★★</span>
+        <span>4.8/5 from verified buyers</span>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="blob"></div>
+      <img src="/images/product.jpg" alt="Renewera Handheld Wood Bath Roller Massage Brush">
+    </div>
+  </div>
+</section>
+
+<!-- TRUST MARQUEE -->
+<div class="trustbar">
+  <div class="track">
+    <span>🌿 100% Natural Wood</span><span>✦ Ships Fast via Amazon</span><span>💆 Relieves Muscle Tension</span><span>♻️ Sustainably Sourced</span><span>🤍 Loved by Thousands</span>
+    <span>🌿 100% Natural Wood</span><span>✦ Ships Fast via Amazon</span><span>💆 Relieves Muscle Tension</span><span>♻️ Sustainably Sourced</span><span>🤍 Loved by Thousands</span>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="section-pad" id="why">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Why Renewera</span>
+      <h2 class="serif">Wellness, beautifully made</h2>
+      <p>Every Renewera tool is crafted to feel as good as it looks — built to last and made to help you feel renewed.</p>
+    </div>
+    <div class="features">
+      <div class="feature reveal"><div class="ico">🌿</div><h3 class="serif">Pure Natural Wood</h3><p>Crafted from sustainably sourced wood with a smooth, skin-friendly finish — no plastics, no compromise.</p></div>
+      <div class="feature reveal"><div class="ico">💆</div><h3 class="serif">Real Tension Relief</h3><p>Contoured rollers target tired muscles and pressure points to ease tension and boost circulation.</p></div>
+      <div class="feature reveal"><div class="ico">✨</div><h3 class="serif">A Daily Ritual</h3><p>Turn a few quiet minutes into a restorative habit — in the bath, after a workout, or before bed.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCT SPOTLIGHT -->
+<section class="section-pad spotlight" id="product">
+  <div class="wrap spot-grid">
+    <div class="spot-img reveal"><img src="/images/1780063680787-6yhejxf2krv.jpeg" alt="Renewera Handheld Wood Bath Roller Massage Brush in use"></div>
+    <div class="reveal">
+      <span class="eyebrow">Bestseller</span>
+      <h2 class="serif" style="font-size:clamp(28px,3.6vw,40px);line-height:1.1;margin:14px 0 4px">Handheld Wood Bath Roller Massage Brush</h2>
+      <div class="price">
+        <span class="now serif">$24.99</span>
+        <span class="was">$34.99</span>
+        <span class="save">Save 29%</span>
+      </div>
+      <p style="color:var(--ink-soft)">A dual-purpose wooden brush and roller that exfoliates, stimulates circulation, and turns your shower into a spa.</p>
+      <ul class="checklist">
+        <li>Natural beechwood with soft bristles</li>
+        <li>Rolling massage nodes for tension relief</li>
+        <li>Ergonomic handle, wet- or dry-use</li>
+        <li>Backed by our customer-first support</li>
+      </ul>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:8px">
+        <a href="AMAZON_URL_PLACEHOLDER" class="btn btn-primary" target="_blank" rel="noopener">Buy on Amazon →</a>
+        <a href="/freegift" class="btn btn-ghost">Get it free →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section-pad testimonials" id="reviews">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Loved by customers</span>
+      <h2 class="serif">Renewed, in their words</h2>
+    </div>
+    <div class="tcards">
+      <div class="tcard reveal"><div class="stars">★★★★★</div><p>"The roller is so relaxing after a long day on my feet. The wood feels premium and it actually helps with the tension in my calves."</p><div class="who"><div class="av">SM</div><div><b>Sarah M.</b><small>Verified Amazon Buyer</small></div></div></div>
+      <div class="tcard reveal"><div class="stars">★★★★★</div><p>"Beautiful craftsmanship. I use it every morning in the shower — my skin feels smoother and it's become part of my routine."</p><div class="who"><div class="av">DK</div><div><b>David K.</b><small>Verified Amazon Buyer</small></div></div></div>
+      <div class="tcard reveal"><div class="stars">★★★★★</div><p>"Bought one, loved it, bought three more as gifts. Renewera's support was wonderful too. Highly recommend."</p><div class="who"><div class="av">AL</div><div><b>Amanda L.</b><small>Verified Amazon Buyer</small></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- GIFT BANNER -->
+<section class="giftbanner">
+  <div class="wrap reveal">
+    <h2 class="serif">A free gift, just for you</h2>
+    <p>Bought from us on Amazon? Scan, claim, and we'll send you a complimentary Renewera massage tool as our thank-you.</p>
+    <a href="/freegift" class="btn btn-light">Claim your free gift →</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="logo">Renewera<span style="color:var(--terra)">.</span></div>
+        <p>Handcrafted wooden wellness tools that help you unwind, recover, and feel renewed — every day.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Shop</h4>
+        <a href="AMAZON_URL_PLACEHOLDER" target="_blank" rel="noopener">Buy on Amazon</a>
+        <a href="/#product">Our Product</a>
+        <a href="/freegift">Free Gift</a>
+      </div>
+      <div class="foot-col">
+        <h4>Company</h4>
+        <a href="/about">About Us</a>
+        <a href="/#reviews">Reviews</a>
+        <a href="/contact">Contact</a>
+      </div>
+      <div class="foot-col">
+        <h4>Support</h4>
+        <a href="mailto:contact@renewera.co">contact@renewera.co</a>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© <span id="yr"></span> Renewera. All rights reserved.</span>
+      <span>Made with care in the USA</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Year
+  document.getElementById('yr').textContent = new Date().getFullYear();
+  // Sticky nav
+  const nav = document.getElementById('nav');
+  const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 30);
+  onScroll(); window.addEventListener('scroll', onScroll, {passive:true});
+  // Mobile menu
+  const burger = document.getElementById('burger'), links = document.getElementById('navLinks');
+  burger.addEventListener('click', () => links.classList.toggle('open'));
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
+  // Scroll reveal
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {threshold:.15});
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
