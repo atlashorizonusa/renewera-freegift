@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800" role="img" aria-label="Product photo placeholder">
+  <rect width="800" height="800" fill="#fbecec"/>
+  <rect x="60" y="60" width="680" height="680" rx="40" fill="#ffffff" stroke="#f1c9c9" stroke-width="2"/>
+  <circle cx="400" cy="350" r="120" fill="#fbecec"/>
+  <text x="400" y="362" text-anchor="middle" font-family="Georgia,serif" font-size="64" fill="#d62828">R</text>
+  <text x="400" y="520" text-anchor="middle" font-family="Arial,sans-serif" font-size="30" fill="#c0392b" font-weight="700">Renewera</text>
+  <text x="400" y="560" text-anchor="middle" font-family="Arial,sans-serif" font-size="20" fill="#a06a6a">add hero product photo → /media/hero.jpg</text>
+</svg>

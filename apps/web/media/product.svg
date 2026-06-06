@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600" role="img" aria-label="Product photo placeholder">
+  <rect width="800" height="600" fill="#fbecec"/>
+  <rect x="40" y="40" width="720" height="520" rx="32" fill="#ffffff" stroke="#f1c9c9" stroke-width="2"/>
+  <circle cx="400" cy="250" r="90" fill="#fbecec"/>
+  <text x="400" y="262" text-anchor="middle" font-family="Georgia,serif" font-size="48" fill="#d62828">R</text>
+  <text x="400" y="400" text-anchor="middle" font-family="Arial,sans-serif" font-size="22" fill="#a06a6a">add product photo → /media/product.jpg</text>
+</svg>
