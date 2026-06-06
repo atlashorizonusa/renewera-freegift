@@ -13,6 +13,12 @@ export interface Env {
   RESEND_API_KEY: string;
   TURNSTILE_SECRET_KEY: string;
   TELEGRAM_BOT_TOKEN: string;
+
+  // Admin panel password gate. Used on local dev + the workers.dev
+  // staging URL, where Cloudflare Access can't protect the hostname.
+  // In production (renewera.co) Cloudflare Access fronts /admin and the
+  // Cf-Access-Authenticated-User-Email header is trusted instead.
+  ADMIN_PASSWORD?: string;
 }
 
 // ── DB rows ────────────────────────────────────────────────────

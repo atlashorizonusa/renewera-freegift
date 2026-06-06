@@ -6,6 +6,7 @@ import verify from "./routes/verify";
 import claim from "./routes/claim";
 import shipped from "./routes/internal/shipped";
 import delivered from "./routes/internal/delivered";
+import admin from "./admin";
 import { runDailyMaintenance } from "./cron/daily";
 
 const app = new Hono<{ Bindings: Env }>();
@@ -31,6 +32,10 @@ app.route("/api/freegift/verify", verify);
 app.route("/api/freegift/claim", claim);
 app.route("/api/internal/shipped", shipped);
 app.route("/api/internal/delivered", delivered);
+
+// Admin panel (HTML). Auth handled inside the router:
+// Cloudflare Access in production, password gate on staging/local.
+app.route("/admin", admin);
 
 app.notFound((c) => c.json({ error: "not found" }, 404));
 app.onError((err, c) => {

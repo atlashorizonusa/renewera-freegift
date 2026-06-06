@@ -25,18 +25,23 @@ TURNSTILE_SITEKEY = "0x4AAAAAAC_ff2OrJKG-uvkK"
 ENVIRONMENT       = "production"
 
 # ───────────────────────────────────────────────────────────────
-# Staging — used for end-to-end testing before cutover.
+# Staging — isolated environment for building the website + admin.
+# Deploys to renewera-freegift-staging.<account>.workers.dev with
+# NO custom domain and NO cron, so it can never touch production
+# traffic or run scheduled jobs against the shared database.
 # Deploy with:  pnpm -F api deploy --env staging
 # ───────────────────────────────────────────────────────────────
 [env.staging]
 name = "renewera-freegift-staging"
+workers_dev = true
 
 [env.staging.assets]
 directory = "../web"
 not_found_handling = "404-page"
 
-[env.staging.triggers]
-crons = ["0 13 * * *"]
+# NOTE: intentionally NO [env.staging.triggers] — staging must never
+# run the daily cron. Production cron + staging cron against the same
+# Supabase would double-send reminder emails and double-recycle claims.
 
 [env.staging.vars]
 TELEGRAM_CHAT_ID  = "-5234908131"
