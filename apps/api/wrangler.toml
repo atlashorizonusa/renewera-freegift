@@ -39,9 +39,11 @@ workers_dev = true
 directory = "../web"
 not_found_handling = "404-page"
 
-# NOTE: intentionally NO [env.staging.triggers] — staging must never
-# run the daily cron. Production cron + staging cron against the same
-# Supabase would double-send reminder emails and double-recycle claims.
+# CRITICAL: `triggers` is an INHERITABLE wrangler key — if omitted here,
+# staging silently inherits the production cron and double-runs the daily
+# job against the shared Supabase DB. An explicit empty array disables it.
+[env.staging.triggers]
+crons = []
 
 [env.staging.vars]
 TELEGRAM_CHAT_ID  = "-5234908131"
