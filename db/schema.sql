@@ -26,7 +26,7 @@ create table if not exists gift_requests (
 
   -- Known at manual insert time (by Rauf)
   amazon_order_number     text not null unique,
-  amazon_order_date       date,                                 -- pasted in at entry; sort by this
+  amazon_order_date       timestamptz,                          -- pasted Amazon order date+time; sort by this
 
   -- Filled by customer via form.html
   full_name               text,
