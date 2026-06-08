@@ -658,13 +658,14 @@
 
         <div class="img-carousel">
           <div class="img-main">
-            <img id="carouselImg" src="/images/product.jpg" alt="Renewera Handheld Wood Bath Roller Massage Brush">
+            <img id="carouselImg" src="/images/product.jpeg" alt="Renewera Handheld Wood Bath Roller Massage Brush">
             <button class="nav-btn nav-prev" id="prevBtn">&#8249;</button>
             <button class="nav-btn nav-next" id="nextBtn">&#8250;</button>
           </div>
           <div class="img-thumbs">
-            <img src="/images/product.jpg" class="img-thumb active" data-idx="0" alt="View 1">
-            <img src="/images/1780063680787-6yhejxf2krv.jpeg" class="img-thumb" data-idx="1" alt="View 2">
+            <img src="/images/product.jpeg" class="img-thumb active" data-idx="0" alt="View 1">
+            <img src="/images/product_2.jpeg" class="img-thumb" data-idx="1" alt="View 2">
+            <img src="/images/product_3.jpeg" class="img-thumb" data-idx="2" alt="View 3">
           </div>
         </div>
 
@@ -934,7 +935,7 @@
   verifyToken();
 
   // Image carousel
-  const carouselImgs = ['/images/product.jpg', '/images/1780063680787-6yhejxf2krv.jpeg'];
+  const carouselImgs = ['/images/product.jpeg', '/images/product_2.jpeg','/images/product_3.jpeg'];
   let carouselIdx = 0;
   function setCarousel(idx) {
     carouselIdx = (idx + carouselImgs.length) % carouselImgs.length;
