@@ -26,7 +26,7 @@ create table if not exists gift_requests (
 
   -- Known at manual insert time (by Rauf)
   amazon_order_number     text not null unique,
-  amazon_order_date       timestamptz,                          -- pasted Amazon order date+time; sort by this
+  amazon_order_date       text,                                 -- exact Amazon order date string, e.g. '6/8/2026 9:23 AM PDT'
 
   -- Filled by customer via form.html
   full_name               text,
@@ -65,7 +65,6 @@ create index if not exists idx_gift_requests_status on gift_requests(status);
 create index if not exists idx_gift_requests_email on gift_requests(email);
 create index if not exists idx_gift_requests_token on gift_requests(unique_token);
 create index if not exists idx_gift_requests_order on gift_requests(amazon_order_number);
-create index if not exists idx_gift_requests_order_date on gift_requests(amazon_order_date);
 create index if not exists idx_gift_requests_tracking_pending
   on gift_requests(tracking_number)
   where status = 'ready_to_ship' and tracking_number is not null and shipping_email_sent_at is null;
