@@ -169,6 +169,26 @@ footer{background:var(--off);color:var(--ink-soft);padding:62px 0 26px;font-size
 .foot-col a:hover{color:var(--red)}
 .foot-bottom{border-top:1px solid var(--line);padding-top:22px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;color:var(--ink-soft)}
 
+/* ── Big alternating image + text sections ── */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.split.reverse .split-media{order:2}
+.split-media{position:relative}
+.split-media img{width:100%;border-radius:24px;box-shadow:0 30px 70px rgba(164,22,26,.16);position:relative;z-index:1}
+.split-media .accent{position:absolute;inset:-7% -5% -7% -5%;background:radial-gradient(circle at 50% 50%,var(--red-soft),#f7d4d4);border-radius:40px;z-index:0}
+.split h2{font-family:var(--serif);font-weight:600;font-size:clamp(28px,3.6vw,42px);line-height:1.12;letter-spacing:-.02em;margin-bottom:18px}
+.split p{font-size:17px;color:var(--ink-soft);margin-bottom:14px}
+
+/* ── Full-width showcase band (big framed image) ── */
+.band{padding:90px 0}
+.band.tint{background:var(--red-tint)}
+.showcase-fig{max-width:1040px;margin:0 auto;border-radius:24px;overflow:hidden;box-shadow:0 30px 80px rgba(45,28,28,.20);background:#fff}
+.showcase-fig img{width:100%;display:block}
+
+/* ── Stat strip ── */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;text-align:center}
+.stat .n{font-family:var(--serif);font-size:clamp(30px,4vw,46px);font-weight:600;color:var(--red);line-height:1}
+.stat .l{font-size:13px;color:var(--ink-soft);margin-top:8px;letter-spacing:.02em}
+
 /* ── Reveal ── */
 .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
 .reveal.in{opacity:1;transform:none}
@@ -179,8 +199,10 @@ footer{background:var(--off);color:var(--ink-soft);padding:62px 0 26px;font-size
 
 /* ── Responsive ── */
 @media(max-width:900px){
-  .hero-grid,.spot-grid,.pdp-grid,.cart-grid{grid-template-columns:1fr;gap:34px}
+  .hero-grid,.spot-grid,.pdp-grid,.cart-grid,.split{grid-template-columns:1fr;gap:34px}
+  .split.reverse .split-media{order:0}
   .features,.tcards{grid-template-columns:1fr}
+  .stats{grid-template-columns:1fr 1fr;gap:30px 16px}
   .foot-grid{grid-template-columns:1fr 1fr}
   .nav-links{position:fixed;inset:0 0 0 28%;background:var(--white);flex-direction:column;justify-content:center;padding:40px;transform:translateX(100%);transition:transform .3s ease;box-shadow:-10px 0 40px rgba(0,0,0,.1)}
   .nav-links.open{transform:none}
