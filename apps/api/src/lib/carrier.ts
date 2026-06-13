@@ -3,6 +3,9 @@
 export interface CarrierInfo {
   carrier: string;
   tracking_url: string;
+  // Normalized tracking number (whitespace/dashes removed, USPS IMpb
+  // routing prefix stripped). Use this for display + records.
+  tracking_number: string;
 }
 
 export function detectCarrier(tracking: string): CarrierInfo {
@@ -13,6 +16,7 @@ export function detectCarrier(tracking: string): CarrierInfo {
     return {
       carrier: "UPS",
       tracking_url: `https://www.ups.com/track?tracknum=${encodeURIComponent(t)}`,
+      tracking_number: t,
     };
   }
 
@@ -32,6 +36,7 @@ export function detectCarrier(tracking: string): CarrierInfo {
     return {
       carrier: "USPS",
       tracking_url: `https://tools.usps.com/go/TrackConfirmAction?tLabels=${encodeURIComponent(t)}`,
+      tracking_number: t,
     };
   }
 
@@ -40,6 +45,7 @@ export function detectCarrier(tracking: string): CarrierInfo {
     return {
       carrier: "FedEx",
       tracking_url: `https://www.fedex.com/fedextrack/?trknbr=${encodeURIComponent(t)}`,
+      tracking_number: t,
     };
   }
 
@@ -48,11 +54,13 @@ export function detectCarrier(tracking: string): CarrierInfo {
     return {
       carrier: "DHL",
       tracking_url: `https://www.dhl.com/en/express/tracking.html?AWB=${encodeURIComponent(t)}`,
+      tracking_number: t,
     };
   }
 
   return {
     carrier: "Unknown",
     tracking_url: `https://www.google.com/search?q=${encodeURIComponent(t + " tracking")}`,
+    tracking_number: t,
   };
 }

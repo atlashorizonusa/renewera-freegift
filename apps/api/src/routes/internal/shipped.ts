@@ -66,6 +66,9 @@ export async function deliverShippingEmail(env: Env, row: GiftRequest) {
   // Honor any manually-set carrier/url on the row, otherwise auto-detect.
   const carrier = (row.carrier && row.carrier.trim()) || detected.carrier;
   const trackingUrl = (row.tracking_url && row.tracking_url.trim()) || detected.tracking_url;
+  // Normalized number (USPS label-barcode prefix stripped) for display + record.
+  const cleanNumber = detected.tracking_number || tracking;
+  row.tracking_number = cleanNumber;
 
   try {
     await sendEmail(env, buildShippedEmail(row, trackingUrl, carrier));
@@ -73,6 +76,7 @@ export async function deliverShippingEmail(env: Env, row: GiftRequest) {
       status: "shipped",
       shipped_at: new Date().toISOString(),
       shipping_email_sent_at: new Date().toISOString(),
+      tracking_number: cleanNumber,
       tracking_url: trackingUrl,
       carrier,
       shipping_email_failed: false,
