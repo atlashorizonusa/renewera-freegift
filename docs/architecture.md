@@ -80,14 +80,15 @@ runDailyMaintenance(env)                    [cron/daily.ts]
   │                   AND reminder_3day_sent_at IS NULL
   │                   → send reminder_3day.ts + stamp the column
   │
-  ├─ Reminder 7-day:  status='submitted' AND email_sent_at < now()-7d
-  │                   AND reminder_7day_sent_at IS NULL
-  │                   → send reminder_7day.ts + stamp the column
+  ├─ Reminder 11-day: status='submitted' AND email_sent_at < now()-11d
+  │  (final)          AND reminder_7day_sent_at IS NULL
+  │                   → send reminder_7day.ts ("expires in 3 days") + stamp
   │
-  ├─ Expiry 10-day:   call SQL function recycle_expired_submissions()
-  │                   which atomically: clears PII, regenerates unique_token,
-  │                   sets status='new', stamps expired_at, increments
-  │                   recycle_count — so the order becomes claimable again.
+  ├─ Expiry 14-day:   call SQL function recycle_expired_submissions() which,
+  │                   for rows still submitted with expired_at IS NULL,
+  │                   regenerates unique_token (old link dies), stamps
+  │                   expired_at, increments recycle_count. Info + status
+  │                   ='submitted' are KEPT (not wiped, not back to inventory).
   │
   └─ Retry sweep:     any row with claim_email_failed, shipping_email_failed,
                       or delivery_email_failed=true → re-send + clear flag.
@@ -107,7 +108,7 @@ runDailyMaintenance(env)                    [cron/daily.ts]
        │ submitted│  (claim email sent; awaiting customer click)
        └────┬─────┘
             │ customer fills shipping form
-            ▼  10 days no claim → cron recycles back to 'new'
+            ▼  14 days no claim → cron expires the link (stays 'submitted', info kept)
        ┌───────────────┐
        │ ready_to_ship │  (Rauf needs to ship physically; add tracking_number)
        └────┬──────────┘
@@ -148,7 +149,7 @@ canonical definition. Notable columns:
 
 - `id` (uuid) — primary key
 - `amazon_order_number` — unique per active row
-- `unique_token` — opaque ID for the claim link; regenerated on recycle
+- `unique_token` — opaque ID for the claim link; regenerated when the link expires
 - `status` — `'new' | 'submitted' | 'ready_to_ship' | 'shipped' | 'delivered'`
 - `full_name`, `email`, `phone`, `shipping_*` — customer-supplied; nullable on `new` rows
 - `email_sent_at`, `claim_email_failed` — claim-email tracking
@@ -190,7 +191,7 @@ the rare case where `ctx.waitUntil` doesn't complete.
 
 ### Why a daily cron instead of every-5-min?
 
-The only inherent need for scheduling is the 3/7/10-day reminder + expiry
+The only inherent need for scheduling is the 3/11/14-day reminder + expiry
 logic. Running every 5 minutes for that would check the same rows 288
 times for no reason. Shipping notifications and claim-email retries are
 event-driven (Supabase webhook + `ctx.waitUntil`), with the daily cron as

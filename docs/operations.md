@@ -101,7 +101,7 @@ Supabase → Table Editor → `gift_requests` → filter by `email` or
 - `reminder_3day_sent_at`, `reminder_7day_sent_at` — whether reminders fired
 - `claim_email_failed`, `shipping_email_failed`, `delivery_email_failed` — whether something blew up
 - `delivered_at`, `delivery_email_sent_at` — delivery tracking
-- `expired_at`, `recycle_count` — whether the row has been recycled (10-day expiry)
+- `expired_at`, `recycle_count` — whether/when the claim link expired (14-day expiry; info is kept, status stays `submitted`)
 
 ### Check whether an email actually delivered
 
@@ -213,8 +213,9 @@ covering the new pattern. Push to main; deploys in ~90s.
 
 ## Things you should never do without thinking
 
-- **Delete a row in `gift_requests`.** Recycling via the 10-day expiry is
-  almost always what you want. Deleting loses audit history.
+- **Delete a row in `gift_requests`.** The 14-day link expiry keeps the row
+  (info + `submitted` status) for follow-up, which is almost always what you
+  want. Deleting loses audit history.
 - **Hard-delete the Supabase project.** Obvious, but: Supabase doesn't
   back up free-tier projects automatically. Take a manual export first.
 - **Change the Worker's Custom Domain bindings.** If you remove

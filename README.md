@@ -61,9 +61,12 @@ CLAUDE.md             Context for AI agents working on this repo
 If steps 3 or 4 stall, the daily cron handles it:
 
 - 3 days after the claim link was sent: gentle reminder.
-- 7 days after: final reminder ("expires in 3 days").
-- 10 days after: PII wiped, `unique_token` regenerated, status reset to
-  `new` so the order is claimable again. `recycle_count` increments.
+- 11 days after: final reminder ("expires in 3 days").
+- 14 days after: the claim link expires — `unique_token` is regenerated (the
+  old link stops working and shows a contact-support screen) and `expired_at`
+  is stamped. The row **keeps** its `full_name`/`email` and **stays
+  `submitted`** (it is NOT wiped and does NOT return to inventory), so
+  "submitted but never ordered" stays auditable. `recycle_count` increments.
 
 The cron also retries any email send that `ctx.waitUntil` failed.
 
