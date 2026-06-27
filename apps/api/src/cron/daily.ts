@@ -54,13 +54,16 @@ export async function runDailyMaintenance(env: Env): Promise<Tally> {
   return tally;
 }
 
-// ── 3-day + 7-day reminder emails ────────────────────────────────
+// ── Day-3 (gentle) + day-11 (final) reminder emails ──────────────
+// Links expire at 14 days, so the final reminder fires at day 11 to keep
+// its "expires in 3 days" wording accurate. (The reminder_7day_sent_at
+// column name is kept for compatibility; it now marks the day-11 final.)
 async function sendReminders(env: Env, db: Supabase, tally: Tally) {
-  // 7-day first so a row that crossed both thresholds today gets the
-  // final-reminder treatment, not a duplicate of the 3-day one.
+  // Final reminder first so a row that crossed both thresholds today gets
+  // the final-reminder treatment, not a duplicate of the gentle one.
   const due7 = await db.selectMany<GiftRequest>(
     "gift_requests",
-    `select=${SELECT_COLS}&status=eq.submitted&reminder_7day_sent_at=is.null&email_sent_at=lt.${sevenDaysAgo()}`,
+    `select=${SELECT_COLS}&status=eq.submitted&reminder_7day_sent_at=is.null&email_sent_at=lt.${elevenDaysAgo()}`,
   );
   for (const row of due7) {
     try {
@@ -95,18 +98,18 @@ async function sendReminders(env: Env, db: Supabase, tally: Tally) {
   }
 }
 
-// ── 10-day expire + recycle to 'new' ─────────────────────────────
+// ── 14-day link expiry (info + status kept for follow-up) ────────
 async function sweepExpired(env: Env, db: Supabase, tally: Tally) {
   try {
     const recycled = await db.recycleExpired();
     tally.expired = recycled.length;
     if (recycled.length > 0) {
       const lines = recycled
-        .map((r) => `• \`${r.amazon_order_number}\` (was: ${r.email ?? "—"})`)
+        .map((r) => `• \`${r.amazon_order_number}\` (${r.email ?? "—"})`)
         .join("\n");
       await sendTelegram(
         env,
-        `♻️ *Recycled ${recycled.length} expired claim(s)*\n\n${lines}\n\n_These orders are claimable again._`,
+        `⏳ *Expired ${recycled.length} unclaimed link(s)*\n\n${lines}\n\n_Info kept; status stays 'submitted' for follow-up. Customer is told to contact support._`,
       );
     }
   } catch (err) {
@@ -170,8 +173,8 @@ async function retryFailedDeliveryEmails(env: Env, db: Supabase, tally: Tally) {
 }
 
 // ── Date helpers ─────────────────────────────────────────────────
-function sevenDaysAgo(): string {
-  return new Date(Date.now() - 7 * 24 * 3600 * 1000).toISOString();
+function elevenDaysAgo(): string {
+  return new Date(Date.now() - 11 * 24 * 3600 * 1000).toISOString();
 }
 function threeDaysAgo(): string {
   return new Date(Date.now() - 3 * 24 * 3600 * 1000).toISOString();

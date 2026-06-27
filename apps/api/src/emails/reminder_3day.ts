@@ -10,7 +10,7 @@ export function buildReminder3DayEmail(env: Env, row: GiftRequest): EmailMessage
 
   const text = `Hi ${fullName},
 
-Just a quick reminder — your free Renewera Handheld Wood Bath Roller Massage Brush is still waiting for you. Your claim link is good for a few more days, but if you don't share your shipping address soon it will expire.
+Just a quick reminder — your free Renewera Handheld Wood Bath Roller Massage Brush is still waiting for you. Whenever you're ready, open your claim link and share your shipping address, and we'll send it right out.
 
 Claim your gift here:
 ${claimUrl}
